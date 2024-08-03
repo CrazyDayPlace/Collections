@@ -4,7 +4,7 @@ local InterfaceManager = {} do
     InterfaceManager.Folder = "GuiSettings"
     InterfaceManager.Settings = {
         Theme = "Darker",
-        Acrylic = false,
+        Acrylic = true,
         Transparency = false,
         MenuKeybind = "LeftAlt",
         BlackScreen = false
@@ -28,6 +28,7 @@ local InterfaceManager = {} do
 		end
 
 		table.insert(paths, self.Folder)
+		table.insert(paths, self.Folder .. "/settings")
 
 		for i = 1, #paths do
 			local str = paths[i]
