@@ -170,12 +170,12 @@ local SaveManager = {} do
 							for idx, option in next, SaveManager.Options do
 								if self.Ignore[idx] then continue end
 								if option.Type == "Dropdown" then
-									if option.Multi == true then
-										option:SetValue({nil})
-									else
-										option:SetValue(nil)
+									if option.Multi == true and not table.find(option.Value, option.Values[1]) then
+										option:SetValue({option.Values[1]})
+									elseif option.Multi == false and option.Value ~= option.Values[1] then
+										option:SetValue(option.Values[1])
 									end
-								elseif option.Type == "Toggle" and not table.find({"Auto Save"}, idx) then
+								elseif option.Type == "Toggle" and not table.find({"Auto Save"}, idx) and option.Value == true then
 										option:SetValue(false)
 								elseif option.Type == "Slider" then
 										option:SetValue(0)
