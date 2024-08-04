@@ -39,25 +39,31 @@ local SaveManager = {} do
 						else
 							local database = {
 								old = SaveManager.Options[idx].Values,
-								value = {},
-								invalid = true
+								new = {},
+								check = {}
 							}
+
 							for inx, val in next, data.value do
-								table.insert(database.value, inx)
+								table.insert(database.new, inx)
 							end
-							for x = 1, #database.old do
-								if table.find(database.value, database.old[x]) then
-									database.invalid = false
-									break
+							for num = 1, #database.old do
+								if table.find(database.new, database.old[num]) then table.insert(database.check, database.old[num])
 								end
 							end
-							if database.invalid == true then
-								for i = 1, #database.value do
-									table.insert(database.old, database.value[i])
-								end
-								SaveManager.Options[idx]:SetValues(database.old)
+							if #database.check == #database.new then
+								warn("Don't need to make changed")
 								SaveManager.Options[idx]:SetValue(data.value)
 							else
+								for num = 1,#database.old do
+									if table.find(database.check, database.old[num]) then
+										table.remove(database.old, table.find(database.check, database.old[num]))
+									end
+								end
+								for num = 1,#database.new do
+									table.insert(database.old, database.new[num])
+								end
+								warn("after make changed")
+								SaveManager.Options[idx]:SetValues(database.old)
 								SaveManager.Options[idx]:SetValue(data.value)
 							end
 						end
