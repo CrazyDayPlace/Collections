@@ -171,7 +171,7 @@ local SaveManager = {} do
 								if self.Ignore[idx] then continue end
 								if option.Type == "Dropdown" then
 									if option.Multi == true and not table.find(option.Value, option.Values[1]) then
-										option:SetValue({option.Values[1]})
+										option:SetValue({[option.Values[1]] = true})
 									elseif option.Multi == false and option.Value ~= option.Values[1] then
 										option:SetValue(option.Values[1])
 									end
