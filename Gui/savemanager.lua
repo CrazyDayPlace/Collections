@@ -9,7 +9,7 @@ local SaveManager = {} do
 				return { type = "Toggle", idx = idx, value = object.Value } 
 			end,
 			Load = function(idx, data)
-				if SaveManager.Options[idx] then 
+				if SaveManager.Options[idx] then
 					SaveManager.Options[idx]:SetValue(data.value)
 				end
 			end,
@@ -29,7 +29,8 @@ local SaveManager = {} do
 				return { type = "Dropdown", idx = idx, value = object.Value, mutli = object.Multi }
 			end,
 			Load = function(idx, data)
-				if SaveManager.Options[idx] then 
+				if SaveManager.Options[idx] then
+					print(SaveManager.Options[idx])
 					SaveManager.Options[idx]:SetValue(data.value)
 				end
 			end,
