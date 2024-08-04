@@ -1,4 +1,3 @@
-if game:GetService("CoreGui"):FindFirstChild("CrazyDay") then return warn("Unable To Load The Gui, Already Loaded GUI") end
 local Time = tick()
 local a, b = {
     {
