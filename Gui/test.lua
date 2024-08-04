@@ -30,14 +30,11 @@ local SaveManager = {} do
 			end,
 			Load = function(idx, data)
 				if SaveManager.Options[idx] then
-					if not table.find(SaveManager.Options[idx].Values, data.value) then
-						local DataValue = SaveManager.Options[idx].Values
-						table.insert(DataValue, data.value)
-						print("add values")
-						SaveManager.Options[idx]:SetValues(DataValue)
+					if table.find(SaveManager.Options[idx].Values, data.value) then
 						SaveManager.Options[idx]:SetValue(data.value)
 					else
-						SaveManager.Options[idx]:SetValue(data.value)
+						local DataLoaded = SaveManager.Options[idx].Values table.insert(DataLoaded, data.value)
+						SaveManager.Options[idx]:SetValues(DataLoaded) SaveManager.Options[idx]:SetValue(data.value)
 					end
 				end
 			end,
@@ -223,3 +220,4 @@ local SaveManager = {} do
 end
 
 return SaveManager
+
