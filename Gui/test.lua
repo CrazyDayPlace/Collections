@@ -33,8 +33,12 @@ local SaveManager = {} do
 					if table.find(SaveManager.Options[idx].Values, data.value) then
 						SaveManager.Options[idx]:SetValue(data.value)
 					else
-						local DataLoaded = SaveManager.Options[idx].Values table.insert(DataLoaded, data.value)
-						SaveManager.Options[idx]:SetValues(DataLoaded) SaveManager.Options[idx]:SetValue(data.value)
+						if SaveManager.Options[idx].Multi == false then
+							local DataLoaded = SaveManager.Options[idx].Values table.insert(DataLoaded, data.value)
+							SaveManager.Options[idx]:SetValues(DataLoaded) SaveManager.Options[idx]:SetValue(data.value)
+						else
+							SaveManager.Options[idx]:SetValue(data.value)
+						end
 					end
 				end
 			end,
