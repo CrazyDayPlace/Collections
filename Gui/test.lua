@@ -37,7 +37,29 @@ local SaveManager = {} do
 							local DataLoaded = SaveManager.Options[idx].Values table.insert(DataLoaded, data.value)
 							SaveManager.Options[idx]:SetValues(DataLoaded) SaveManager.Options[idx]:SetValue(data.value)
 						else
-							SaveManager.Options[idx]:SetValue(data.value)
+							local database = {
+								old = SaveManager.Options[idx].Values,
+								value = {},
+								invalid = true
+							}
+							for inx, val in next, data.value do
+								table.insert(database.value, inx)
+							end
+							for x = 1, #database.old do
+								if table.find(database.value, database.old[x]) then
+									database.invalid = false
+									break
+								end
+							end
+							if database.invalid == true then
+								for i = 1, #database.value do
+									table.insert(database.old, database.value[i])
+								end
+								SaveManager.Options[idx]:SetValues(database.old)
+								SaveManager.Options[idx]:SetValue(data.value)
+							else
+								SaveManager.Options[idx]:SetValue(data.value)
+							end
 						end
 					end
 				end
