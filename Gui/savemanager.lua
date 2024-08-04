@@ -54,12 +54,13 @@ local SaveManager = {} do
 								SaveManager.Options[idx]:SetValue(data.value)
 							else
 								for num = 1,#database.old do
-									if table.find(database.check, database.old[num]) then
-										table.remove(database.old, table.find(database.check, database.old[num]))
+									if table.find(database.new, database.old[num]) then
+										table.remove(database.old, table.find(database.new, database.old[num]))
 									end
 								end
 								for num = 1,#database.new do
-									table.insert(database.old, database.new[num])
+									if not table.find(database.old, database.new[num]) then table.insert(database.old, database.new[num])
+									end
 								end
 								SaveManager.Options[idx]:SetValues(database.old)
 								SaveManager.Options[idx]:SetValue(data.value)
