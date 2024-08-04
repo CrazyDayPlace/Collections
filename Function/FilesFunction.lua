@@ -19,14 +19,13 @@ local Files = {} do
             wait() until not isfolder(path)
         end
     end
-    function Files:CheckFiles(path, idx)
+    function Files:CheckFiles(path)
         if not path then return false, "Unable To CheckFile, Invaild Path"
-        elseif not idx then return false, "Unable To CheckFile, Invaild Index Values"
         elseif not isfile or not writefile then return false, "Unable To CheckFile, The Excutor Has Invaild IsFile Functions" end
 
         if not isfile(path) then
             repeat
-                writefile(path, idx)
+                writefile(path, game:GetService("HttpService"):JSONEncode({}))
             wait() until isfile(path)
         end
     end
