@@ -33,8 +33,38 @@ local SaveManager = {} do
 					if table.find(SaveManager.Options[idx].Values, data.value) then
 						SaveManager.Options[idx]:SetValue(data.value)
 					else
-						local DataLoaded = SaveManager.Options[idx].Values table.insert(DataLoaded, data.value)
-						SaveManager.Options[idx]:SetValues(DataLoaded) SaveManager.Options[idx]:SetValue(data.value)
+						if SaveManager.Options[idx].Multi == false then
+							local DataLoaded = SaveManager.Options[idx].Values table.insert(DataLoaded, data.value)
+							SaveManager.Options[idx]:SetValues(DataLoaded) SaveManager.Options[idx]:SetValue(data.value)
+						else
+							local database = {
+								old = SaveManager.Options[idx].Values,
+								new = {},
+								check = {}
+							}
+
+							for inx, val in next, data.value do
+								table.insert(database.new, inx)
+							end
+							for num = 1, #database.old do
+								if table.find(database.new, database.old[num]) then table.insert(database.check, database.old[num])
+								end
+							end
+							if #database.check == #database.new then
+								SaveManager.Options[idx]:SetValue(data.value)
+							else
+								for num = 1,#database.old do
+									if table.find(database.check, database.old[num]) then
+										table.remove(database.old, table.find(database.check, database.old[num]))
+									end
+								end
+								for num = 1,#database.new do
+									table.insert(database.old, database.new[num])
+								end
+								SaveManager.Options[idx]:SetValues(database.old)
+								SaveManager.Options[idx]:SetValue(data.value)
+							end
+						end
 					end
 				end
 			end,
@@ -220,5 +250,4 @@ local SaveManager = {} do
 end
 
 return SaveManager
-
 
