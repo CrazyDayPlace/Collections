@@ -48,7 +48,8 @@ local Files = {} do
             end
             if name and name:find(".lua") then
                 name = name:gsub(".lua", "")
-            elseif name and name:find(".json") then
+            end
+            if name and name:find(".json") then
                 name = name:gsub(".json", "")
             end
             if sub and name then
