@@ -46,12 +46,22 @@ local Files = {} do
             if name and name:find([[\]]) then
                 name = name:gsub([[\]], "")
             end
-            if name and name:find(".lua") then
-                name = name:gsub(".lua", "")
-            end
-            if name and name:find(".json") then
-                name = name:gsub(".json", "")
-            end
+			if name and name:find(".lua") and name:find(".json") then
+				local n, l = name:find(".lua")
+				local b, c = name:find(".json")
+				if l == name:len() then
+					name = name:gsub(".lua", "")
+				elseif c == name:len() then
+					name = name:gsub(".json", "")
+				end
+            else
+                if name and name:find(".lua") then
+                    name = name:gsub(".lua", "")
+                end
+                if name and name:find(".json") then
+                    name = name:gsub(".json", "")
+                end
+			end
             if sub and name then
                 name = name:gsub(sub, "")
             end
