@@ -2772,6 +2772,7 @@ local aa = {
                     Values = j.Values,
                     Value = j.Default,
                     Multi = j.Multi,
+                    Lock = j.Lock,
                     Buttons = {},
                     Opened = false,
                     Type = "Dropdown",
@@ -2967,7 +2968,7 @@ local aa = {
                     end
                     return C
                 else
-                    return l.Value and 2 or 0
+                    return l.Value and 1 or 0
                 end
             end
             function l.BuildDropdownList(B)
@@ -3080,7 +3081,7 @@ local aa = {
                                     T.UserInputType == Enum.UserInputType.Touch
                              then
                                 local U = not N
-                                if l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                if j.Lock and l:GetActiveValues() == 1 and not U and not j.AllowNull then
                                 else
                                     if j.Multi then
                                         N = U
