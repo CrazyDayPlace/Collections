@@ -3173,7 +3173,6 @@ local aa = {
                 for C = 1, #B do
                     local D = B[C]
                     if j.Multi then
-                        l.Value[l.Values[D]] = true
                         TOSX[l.Values[D]] = true
                     else
                         l.Value = l.Values[D]
