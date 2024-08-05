@@ -3153,7 +3153,7 @@ local aa = {
             end
             l:BuildDropdownList()
             l:Display()
-            local B = {}
+            local B, TOSX = {}, {}
             if type(j.Default) == "string" then
                 local C = table.find(l.Values, j.Default)
                 if C then
@@ -3174,12 +3174,16 @@ local aa = {
                     local D = B[C]
                     if j.Multi then
                         l.Value[l.Values[D]] = true
+                        TOSX[l.Values[D]] = true
                     else
                         l.Value = l.Values[D]
                     end
                     if not j.Multi then
                         break
                     end
+                end
+                if j.Multi then
+                    l:SetValue(TOSX)
                 end
                 l:BuildDropdownList()
                 l:Display()
