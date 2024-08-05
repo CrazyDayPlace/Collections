@@ -3080,23 +3080,20 @@ local aa = {
                                     T.UserInputType == Enum.UserInputType.Touch
                              then
                                 local U = not N
-                                if l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                if j.Multi then
+                                    N = U
+                                    l.Value[I] = N and true or nil
                                 else
-                                    if j.Multi then
-                                        N = U
-                                        l.Value[I] = N and true or nil
-                                    else
-                                        N = U
-                                        l.Value = N and I or nil
-                                        for V, W in next, D do
-                                            W:UpdateButton()
-                                        end
+                                    N = U
+                                    l.Value = N and I or nil
+                                    for V, W in next, D do
+                                        W:UpdateButton()
                                     end
-                                    J:UpdateButton()
-                                    l:Display()
-                                    k:SafeCallback(l.Callback, l.Value)
-                                    k:SafeCallback(l.Changed, l.Value)
                                 end
+                                J:UpdateButton()
+                                l:Display()
+                                k:SafeCallback(l.Callback, l.Value)
+                                k:SafeCallback(l.Changed, l.Value)
                             end
                         end
                     )
