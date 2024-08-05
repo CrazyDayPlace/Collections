@@ -3181,6 +3181,11 @@ local aa = {
                         break
                     end
                 end
+                if j.Multi then
+                    for C, E in next, B do
+                        print(C, E)
+                    end
+                end
                 l:BuildDropdownList()
                 l:Display()
             end
