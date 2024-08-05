@@ -19,7 +19,7 @@ local Files = {} do
             wait() until not isfolder(path)
         end
     end
-    function Files:CheckFiles(path, idx)
+    function Files:CheckFile(path, idx)
         if not path then return false, "Unable To CheckFile, Invaild Path"
         elseif not isfile or not writefile then return false, "Unable To CheckFile, The Excutor Has Invaild IsFile Functions" end
 
@@ -33,10 +33,42 @@ local Files = {} do
             wait() until isfile(path)
         end
     end
-    function Files:ListFiles(path, sub)
-        if not path then return false, "Unable To ListFiles, Invail Path"
-        elseif not listfiles or not isfolder then return false, "Unable To ListFiles, The Excutor Has Invaild ListFiles Functions" 
-        elseif path and not isfolder(path) then return false, "Unable To ListFiles, Invail Folder To List" end
+    function Files:WriteFile(path, idx)
+        if not path then return false, "Unable To CheckFile, Invaild Path"
+        elseif not isfile or not writefile then return false, "Unable To CheckFile, The Excutor Has Invaild IsFile Functions" end
+
+        if type(idx) == "table" then
+            writefile(path, game:GetService("HttpService"):JSONEncode(idx))
+        else
+            writefile(path, idx or "")
+        end
+    end
+    function Files:DeleteFile(path)
+        if not path then return false, "Unable To DeleteFile, Invaild Path"
+        elseif not isfile or not delfile then return false, "Unable To DeleteFile, The Excutor Has Invaild delfile Functions" end
+
+        if isfile(path) then
+            repeat
+                delfile(path)
+            wait() until not isfile(path)
+        end
+    end
+    function Files:ReadFile(path, type)
+        if not path then return false, "Unable To ReadFile, Invaild Path"
+        elseif not isfile or not readfile then return false, "Unable To ReadFile, The Excutor Has Invaild readfile Functions" end
+
+        if isfile(path) and type == "table" then
+            return game:GetService("HttpService"):JSONDecode(readfile(path))
+        else
+            if isfile(path) then
+                return readfile(path)
+            end
+        end
+    end
+    function Files:ListFile(path)
+        if not path then return false, "Unable To ListFile, Invail Path"
+        elseif not listfiles or not isfolder then return false, "Unable To ListFile, The Excutor Has Invaild ListFile Functions" 
+        elseif path and not isfolder(path) then return false, "Unable To ListFile, Invail Folder To List" end
 
         local tables, name = {}, false
         for _, idx in next, listfiles(path) do
@@ -62,8 +94,9 @@ local Files = {} do
                     name = name:gsub(".json", "")
                 end
 			end
-            if sub and name then
-                name = name:gsub(sub, "")
+            if name then
+                local line = path:gsub("/", "")
+                name = name:gsub(line, "")
             end
             table.insert(tables, name or idx)
         end
