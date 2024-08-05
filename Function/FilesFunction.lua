@@ -25,7 +25,11 @@ local Files = {} do
 
         if not isfile(path) then
             repeat
-                writefile(path, idx or "")
+                if type(idx) == "table" then
+                    writefile(path, game:GetService("HttpService"):JSONEncode(idx))
+                else
+                    writefile(path, idx or "")
+                end
             wait() until isfile(path)
         end
     end
