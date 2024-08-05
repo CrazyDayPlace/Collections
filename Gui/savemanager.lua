@@ -19,7 +19,7 @@ local SaveManager = {} do
 				return { type = "Slider", idx = idx, value = tostring(object.Value) }
 			end,
 			Load = function(idx, data)
-				if SaveManager.Options[idx] then 
+				if SaveManager.Options[idx] then
 					SaveManager.Options[idx]:SetValue(data.value)
 				end
 			end,
@@ -33,7 +33,7 @@ local SaveManager = {} do
 					if table.find(SaveManager.Options[idx].Values, data.value) then
 						SaveManager.Options[idx]:SetValue(data.value)
 					else
-						if SaveManager.Options[idx].Multi == false then
+						if not SaveManager.Options[idx].Multi then
 							local DataLoaded = SaveManager.Options[idx].Values table.insert(DataLoaded, data.value)
 							SaveManager.Options[idx]:SetValues(DataLoaded) SaveManager.Options[idx]:SetValue(data.value)
 						else
