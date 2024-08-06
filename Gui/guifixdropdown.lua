@@ -3122,7 +3122,9 @@ local aa = {
                 else
                     if not C then
                         l.Value = nil
-                    elseif table.find(l.Values, C) then
+                    elseif type(C) == "number" and l.Values[C] and table.find(l.Values, l.Values[C]) then
+                        l.Value = l.Values[C]
+                    elseif type(C) == "string" and table.find(l.Values, C) then
                         l.Value = C
                     end
                 end
