@@ -206,21 +206,26 @@ local SaveManager = {} do
 							for idx, option in next, SaveManager.Options do
 								if self.Ignore[idx] then continue end
 								if option.Type == "Dropdown" then
-									if option.Multi == true and not table.find(option.Value, option.Values[1]) then
-										option:SetValue({[option.Values[1]] = true})
-									elseif option.Multi == false and option.Value ~= option.Values[1] then
-										option:SetValue(option.Values[1])
+									if option.Multi then
+										local B = {}
+										for x = 1, #option.Default do
+											local D = option.Default[x]
+											B[D] = true
+										end
+										option:SetValue(B)
+									else
+										option:SetValue(option.Default)
 									end
-								elseif option.Type == "Toggle" and not table.find({"Auto Save"}, idx) and option.Value == true then
-										option:SetValue(false)
+								elseif option.Type == "Toggle" then
+										option:SetValue(option.Default)
 								elseif option.Type == "Slider" then
-										option:SetValue(0)
+										option:SetValue(option.Default)
 								elseif option.Type == "Input" then
-										option:SetValue("")
+										option:SetValue(option.Default)
 								elseif option.Type == "Keybind" then
-										option:SetValue("", option.Mode)
+										option:SetValue(option.Default, option.Mode)
 								elseif option.Type == "Colorpicker" then
-										option:SetValueRGB(Color3.fromRGB(0, 0, 0))
+										option:SetValue(option.Default)
 								end
 							end
 						end},
