@@ -2772,6 +2772,7 @@ local aa = {
                 {
                     Values = j.Values,
                     Value = j.Default,
+                    Default = j.Default,
                     Multi = j.Multi,
                     Lock = j.Lock,
                     Buttons = {},
@@ -3038,30 +3039,6 @@ local aa = {
                             K.Size = UDim2.new(0, 4, 0, T)
                         end
                     )
-                    c.AddSignal(
-                        M.MouseEnter,
-                        function()
-                            P(N and 0.85 or 0.89)
-                        end
-                    )
-                    c.AddSignal(
-                        M.MouseLeave,
-                        function()
-                            P(N and 0.89 or 1)
-                        end
-                    )
-                    c.AddSignal(
-                        M.MouseButton1Down,
-                        function()
-                            P(0.92)
-                        end
-                    )
-                    c.AddSignal(
-                        M.MouseButton1Up,
-                        function()
-                            P(N and 0.85 or 0.89)
-                        end
-                    )
                     function J.UpdateButton(T)
                         if j.Multi then
                             N = l.Value[I]
@@ -3072,36 +3049,9 @@ local aa = {
                             N = l.Value == I
                             P(N and 0.89 or 1)
                         end
-                        S:setGoal(d.Spring.new(N and 14 or 100, {frequency = 6}))
+                        S:setGoal(d.Spring.new(N and 14 or 0, {frequency = 6}))
                         R(N and 0 or 1)
                     end
-                    L.InputBegan:Connect(
-                        function(T)
-                            if
-                                T.UserInputType == Enum.UserInputType.MouseButton1 or
-                                    T.UserInputType == Enum.UserInputType.Touch
-                             then
-                                local U = not N
-                                if j.Lock and l:GetActiveValues() == 1 and not U and not j.AllowNull then
-                                else
-                                    if j.Multi then
-                                        N = U
-                                        l.Value[I] = N and true or nil
-                                    else
-                                        N = U
-                                        l.Value = N and I or nil
-                                        for V, W in next, D do
-                                            W:UpdateButton()
-                                        end
-                                    end
-                                    J:UpdateButton()
-                                    l:Display()
-                                    k:SafeCallback(l.Callback, l.Value)
-                                    k:SafeCallback(l.Changed, l.Value)
-                                end
-                            end
-                        end
-                    )
                     J:UpdateButton()
                     l:Display()
                     D[M] = J
@@ -3115,8 +3065,8 @@ local aa = {
                     end
                 end
                 x = x + 30
-                z()
-                y()
+                v.Size = UDim2.fromOffset(x, 250)
+                t.CanvasSize = UDim2.fromOffset(0, s.AbsoluteContentSize.Y)
             end
             function l.SetValues(B, C)
                 if C then
