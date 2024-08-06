@@ -1066,10 +1066,6 @@ local aa = {
                 end
             )
             function r.Open(t)
-                if q.LabelPos then
-                    local u = 30 * (q.LabelPos/100)
-                    r.LabelHolder.Size = UDim2.new(1, -(q.LabelPos - u), 0, 0)
-                end
                 local u = r.LabelHolder.AbsoluteSize.Y
                 r.Holder.Size = UDim2.new(1, 0, 0, q.HolderSize or 58 + u)
                 s:setGoal {Scale = l(0, {frequency = 5}), Offset = l(0, {frequency = 5})}
@@ -3076,7 +3072,6 @@ local aa = {
                             N = l.Value == I
                             P(N and 0.89 or 1)
                         end
-                        S:setGoal(d.Spring.new(N and 14 or 6, {frequency = 6}))
                         R(N and 0 or 1)
                     end
                     L.InputBegan:Connect(
