@@ -929,7 +929,8 @@ local aa = {
             q.Content = q.Content or ""
             q.SubContent = q.SubContent or ""
             q.Show = q.Show
-            q.LabelPos = q.LabelPos or 35
+            q.LabelPos = q.LabelPos or nil
+            q.HolderSize = q.HolderSize or nil
             q.Duration = q.Duration or nil
             q.Buttons = q.Buttons or {}
             local r = {Closed = false, Size = UDim2.new(1, 0, 1, 0)}
@@ -994,7 +995,7 @@ local aa = {
                     AutomaticSize = Enum.AutomaticSize.Y,
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                     BackgroundTransparency = 1,
-                    Position = UDim2.fromOffset(14, q.LabelPos),
+                    Position = UDim2.fromOffset(14, q.LabelPos or 40),
                     Size = UDim2.new(1, -28, 0, 0)
                 },
                 {
@@ -1066,7 +1067,7 @@ local aa = {
             )
             function r.Open(t)
                 local u = r.LabelHolder.AbsoluteSize.Y
-                r.Holder.Size = UDim2.new(1, 0, 0, 58 + u)
+                r.Holder.Size = UDim2.new(1, 0, 0, q.HolderSize or 58 + u)
                 s:setGoal {Scale = l(0, {frequency = 5}), Offset = l(0, {frequency = 5})}
             end
             function r.Close(t)
@@ -3071,7 +3072,7 @@ local aa = {
                             N = l.Value == I
                             P(N and 0.89 or 1)
                         end
-                        S:setGoal(d.Spring.new(N and 14 or 6, {frequency = 6}))
+                        S:setGoal(d.Spring.new(N and 14 or 0, {frequency = 0}))
                         R(N and 0 or 1)
                     end
                     L.InputBegan:Connect(
@@ -3173,7 +3174,6 @@ local aa = {
                 for C = 1, #B do
                     local D = B[C]
                     if j.Multi then
-                        l.Value[l.Values[D]] = true
                         TOSX[l.Values[D]] = true
                     else
                         l.Value = l.Values[D]
