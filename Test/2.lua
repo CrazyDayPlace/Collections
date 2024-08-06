@@ -3092,12 +3092,14 @@ local aa = {
                     end
                 end
                 x = x + 30
+                v.Size = UDim2.fromOffset(x, 300)
+                t.CanvasSize = UDim2.fromOffset(0, s.AbsoluteContentSize.Y)
             end
             function l.SetValues(B, C)
                 if C then
                     l.Values = C
                 end
-                l:BuildDropdownList()
+                --l:BuildDropdownList()
             end
             function l.OnChanged(B, C)
                 l.Changed = C
@@ -3119,7 +3121,7 @@ local aa = {
                         l.Value = C
                     end
                 end
-                l:BuildDropdownList()
+                --l:BuildDropdownList()
                 k:SafeCallback(l.Callback, l.Value)
                 k:SafeCallback(l.Changed, l.Value)
             end
@@ -3127,7 +3129,7 @@ local aa = {
                 m:Destroy()
                 k.Options[i] = nil
             end
-            l:BuildDropdownList()
+            --l:BuildDropdownList()
             l:Display()
             local B, TOSX = {}, {}
             if type(j.Default) == "string" then
@@ -3160,7 +3162,7 @@ local aa = {
                 if j.Multi then
                     l:SetValue(TOSX)
                 end
-                l:BuildDropdownList()
+                --l:BuildDropdownList()
                 l:Display()
             end
             k.Options[i] = l
