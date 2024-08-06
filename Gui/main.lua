@@ -3150,13 +3150,13 @@ local aa = {
                 else
                     if not C then
                         l.Value = nil
-                    elseif type(C) == "number" then
+                    elseif type(C) == "number" and l.Values[C] then
                         if table.find(l.Values, l.Values[C]) then
                             l.Value = l.Values[C]
                         else
                             l.Value = nil
                         end
-                    elseif table.find(l.Values, C) then
+                    elseif type(C) == "string" and table.find(l.Values, C) then
                         l.Value = C
                     end
                 end
