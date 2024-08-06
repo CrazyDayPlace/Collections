@@ -2774,7 +2774,7 @@ local aa = {
                     Value = j.Default,
                     Default = j.Default,
                     Multi = j.Multi,
-                    Lock = j.Lock,
+                    Tables = {},
                     Buttons = {},
                     Opened = false,
                     Type = "Dropdown",
@@ -2936,6 +2936,7 @@ local aa = {
                 l.Opened = true
                 A.ScrollingEnabled = false
                 v.Visible = true
+                l:BuildDropdownList()
                 af:Create(
                     u,
                     TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
@@ -2947,6 +2948,11 @@ local aa = {
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
+                for E, F in next, t:GetChildren() do
+                    if not F:IsA "UIListLayout" then
+                        F:Destroy()
+                    end
+                end
             end
             function l.Display(B)
                 local C, D = l.Values, ""
@@ -3064,6 +3070,10 @@ local aa = {
                                     if j.Multi then
                                         N = U
                                         l.Value[I] = N and true or nil
+                                        l.Tables = {}
+                                        for DC, TB in next, l.Value do
+                                            table.insert(l.Tables, TB == true and DC)
+                                        end
                                     else
                                         N = U
                                         l.Value = N and I or nil
@@ -3080,6 +3090,7 @@ local aa = {
                         end
                     )
                     J:UpdateButton()
+                    l:Display()
                     D[M] = J
                 end
                 x = 0
@@ -3091,14 +3102,13 @@ local aa = {
                     end
                 end
                 x = x + 30
-                v.Size = UDim2.fromOffset(x, 300)
-                t.CanvasSize = UDim2.fromOffset(0, s.AbsoluteContentSize.Y)
+                z()
+                y()
             end
             function l.SetValues(B, C)
                 if C then
                     l.Values = C
                 end
-                l:BuildDropdownList()
             end
             function l.OnChanged(B, C)
                 l.Changed = C
@@ -3113,6 +3123,10 @@ local aa = {
                         end
                     end
                     l.Value = D
+                    l.Tables = {}
+                    for DC, TB in next, l.Value do
+                        table.insert(l.Tables, TB == true and DC)
+                    end
                 else
                     if not C then
                         l.Value = nil
@@ -3120,7 +3134,7 @@ local aa = {
                         l.Value = C
                     end
                 end
-                l:BuildDropdownList()
+                l:Display()
                 k:SafeCallback(l.Callback, l.Value)
                 k:SafeCallback(l.Changed, l.Value)
             end
@@ -3128,7 +3142,6 @@ local aa = {
                 m:Destroy()
                 k.Options[i] = nil
             end
-            l:BuildDropdownList()
             l:Display()
             local B, TOSX = {}, {}
             if type(j.Default) == "string" then
@@ -3141,6 +3154,7 @@ local aa = {
                     local E = table.find(l.Values, D)
                     if E then
                         table.insert(B, E)
+                        table.insert(l.Tables, D)
                     end
                 end
             elseif type(j.Default) == "number" and l.Values[j.Default] ~= nil then
@@ -3161,7 +3175,6 @@ local aa = {
                 if j.Multi then
                     l:SetValue(TOSX)
                 end
-                l:BuildDropdownList()
                 l:Display()
             end
             k.Options[i] = l
