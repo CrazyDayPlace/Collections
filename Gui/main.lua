@@ -2961,7 +2961,7 @@ local aa = {
                 else
                     D = l.Value or ""
                 end
-                n.Text = (D == "" and "--" or D)
+                n.Text = (D == "" and "---" or D)
             end
             function l.GetActiveValues(B)
                 if j.Multi then
@@ -3150,6 +3150,12 @@ local aa = {
                 else
                     if not C then
                         l.Value = nil
+                    elseif type(C) == "number" then
+                        if table.find(l.Values, l.Values[C]) then
+                            l.Value = l.Values[C]
+                        else
+                            l.Value = nil
+                        end
                     elseif table.find(l.Values, C) then
                         l.Value = C
                     end
