@@ -2975,11 +2975,6 @@ local aa = {
             end
             function l.BuildDropdownList(B)
                 local C, D = l.Values, {}
-                for E, F in next, t:GetChildren() do
-                    if not F:IsA "UIListLayout" then
-                        F:Destroy()
-                    end
-                end
                 local G = 0
                 for H, I in next, C do
                     local J = {}
@@ -3092,8 +3087,8 @@ local aa = {
                     end
                 end
                 x = x + 30
-                z()
-                y()
+                v.Size = UDim2.fromOffset(x, 300)
+                t.CanvasSize = UDim2.fromOffset(0, s.AbsoluteContentSize.Y)
             end
             function l.SetValues(B, C)
                 if C then
