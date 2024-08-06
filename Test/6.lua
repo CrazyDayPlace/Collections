@@ -2772,8 +2772,9 @@ local aa = {
                 {
                     Values = j.Values,
                     Value = j.Default,
+                    Default = j.Default,
                     Multi = j.Multi,
-                    Lock = j.Lock,
+                    Tables = {},
                     Buttons = {},
                     Opened = false,
                     Type = "Dropdown",
@@ -2935,6 +2936,7 @@ local aa = {
                 l.Opened = true
                 A.ScrollingEnabled = false
                 v.Visible = true
+                l:BuildDropdownList()
                 af:Create(
                     u,
                     TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
@@ -2946,6 +2948,11 @@ local aa = {
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
+                for E, F in next, t:GetChildren() do
+                    if not F:IsA "UIListLayout" then
+                        F:Destroy()
+                    end
+                end
             end
             function l.Display(B)
                 local C, D = l.Values, ""
@@ -3038,30 +3045,6 @@ local aa = {
                             K.Size = UDim2.new(0, 4, 0, T)
                         end
                     )
-                    c.AddSignal(
-                        M.MouseEnter,
-                        function()
-                            P(N and 0.85 or 0.89)
-                        end
-                    )
-                    c.AddSignal(
-                        M.MouseLeave,
-                        function()
-                            P(N and 0.89 or 1)
-                        end
-                    )
-                    c.AddSignal(
-                        M.MouseButton1Down,
-                        function()
-                            P(0.92)
-                        end
-                    )
-                    c.AddSignal(
-                        M.MouseButton1Up,
-                        function()
-                            P(N and 0.85 or 0.89)
-                        end
-                    )
                     function J.UpdateButton(T)
                         if j.Multi then
                             N = l.Value[I]
@@ -3073,7 +3056,7 @@ local aa = {
                             P(N and 0.89 or 1)
                         end
                         S:setGoal(d.Spring.new(N and 14 or 0, {frequency = 6}))
-                        R((N and 0) or 1)
+                        R(N and 0 or 1)
                     end
                     L.InputBegan:Connect(
                         function(T)
@@ -3087,6 +3070,10 @@ local aa = {
                                     if j.Multi then
                                         N = U
                                         l.Value[I] = N and true or nil
+                                        l.Tables = {}
+                                        for DC, TB in next, l.Value do
+                                            table.insert(l.Tables, TB == true and DC)
+                                        end
                                     else
                                         N = U
                                         l.Value = N and I or nil
@@ -3122,7 +3109,6 @@ local aa = {
                 if C then
                     l.Values = C
                 end
-                l:BuildDropdownList()
             end
             function l.OnChanged(B, C)
                 l.Changed = C
@@ -3137,6 +3123,10 @@ local aa = {
                         end
                     end
                     l.Value = D
+                    l.Tables = {}
+                    for DC, TB in next, l.Value do
+                        table.insert(l.Tables, TB == true and DC)
+                    end
                 else
                     if not C then
                         l.Value = nil
@@ -3144,7 +3134,7 @@ local aa = {
                         l.Value = C
                     end
                 end
-                l:BuildDropdownList()
+                l:Display()
                 k:SafeCallback(l.Callback, l.Value)
                 k:SafeCallback(l.Changed, l.Value)
             end
@@ -3152,7 +3142,6 @@ local aa = {
                 m:Destroy()
                 k.Options[i] = nil
             end
-            l:BuildDropdownList()
             l:Display()
             local B, TOSX = {}, {}
             if type(j.Default) == "string" then
@@ -3185,7 +3174,6 @@ local aa = {
                 if j.Multi then
                     l:SetValue(TOSX)
                 end
-                l:BuildDropdownList()
                 l:Display()
             end
             k.Options[i] = l
