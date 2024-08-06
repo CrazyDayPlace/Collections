@@ -3169,6 +3169,10 @@ local aa = {
                 end
                 if j.Multi then
                     l:SetValue(TOSX)
+
+                    for DC, TB in next, l.Value do
+                        table.insert(l.Tables, TB == true and DC)
+                    end
                 end
                 l:Display()
             end
