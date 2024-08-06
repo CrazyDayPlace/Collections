@@ -2291,6 +2291,7 @@ local aa = {
             assert(x.Default, "AddColorPicker: Missing default value.")
             local z = {
                 Value = x.Default,
+                Default = x.Default,
                 Transparency = x.Transparency or 0,
                 Type = "Colorpicker",
                 Title = type(x.Title) == "string" and x.Title or "Colorpicker",
@@ -2772,8 +2773,9 @@ local aa = {
                 {
                     Values = j.Values,
                     Value = j.Default,
+                    Default = j.Default,
                     Multi = j.Multi,
-                    Lock = j.Lock,
+                    Tables = {},
                     Buttons = {},
                     Opened = false,
                     Type = "Dropdown",
@@ -3087,6 +3089,10 @@ local aa = {
                                     if j.Multi then
                                         N = U
                                         l.Value[I] = N and true or nil
+                                        l.Tables = {}
+                                        for DC, TB in next, l.Value do
+                                            table.insert(l.Tables, TB == true and DC)
+                                        end
                                     else
                                         N = U
                                         l.Value = N and I or nil
@@ -3137,6 +3143,10 @@ local aa = {
                         end
                     end
                     l.Value = D
+                    l.Tables = {}
+                    for DC, TB in next, l.Value do
+                        table.insert(l.Tables, TB == true and DC)
+                    end
                 else
                     if not C then
                         l.Value = nil
@@ -3165,6 +3175,7 @@ local aa = {
                     local E = table.find(l.Values, D)
                     if E then
                         table.insert(B, E)
+                        table.insert(l.Tables, D)
                     end
                 end
             elseif type(j.Default) == "number" and l.Values[j.Default] ~= nil then
@@ -3208,6 +3219,7 @@ local aa = {
             local h, i =
                 {
                     Value = f.Default or "",
+                    Default = f.Default or "",
                     Numeric = f.Numeric or false,
                     Finished = f.Finished or false,
                     Callback = f.Callback or function(h)
@@ -3283,6 +3295,7 @@ local aa = {
             local h, i, j =
                 {
                     Value = f.Default,
+                    Default = f.Default,
                     Toggled = false,
                     Mode = f.Mode or "Toggle",
                     Type = "Keybind",
@@ -3489,7 +3502,7 @@ local aa = {
             assert(f.Max, "Slider - Missing maximum value.")
             assert(f.Rounding, "Slider - Missing rounding value.")
             local h, i, j =
-                {Value = nil, Min = f.Min, Max = f.Max, Rounding = f.Rounding, Callback = f.Callback or function(h)
+                {Value = nil, Default = f.Default, Min = f.Min, Max = f.Max, Rounding = f.Rounding, Callback = f.Callback or function(h)
                         end, Type = "Slider"},
                 false,
                 ac(aj.Element)(f.Title, f.Description, d.Container, false)
@@ -3614,7 +3627,7 @@ local aa = {
         function c.New(d, e, f)
             local g = d.Library
             assert(f.Title, "Toggle - Missing Title")
-            local h, i = {Value = f.Default or false, Callback = f.Callback or function(h)
+            local h, i = {Value = f.Default or false, Default = f.Default or false, Callback = f.Callback or function(h)
                         end, Type = "Toggle"}, ac(aj.Element)(f.Title, f.Description, d.Container, true)
             i.DescLabel.Size = UDim2.new(1, -54, 0, 14)
             h.SetTitle = i.SetTitle
