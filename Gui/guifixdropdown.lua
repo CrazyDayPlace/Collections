@@ -2291,6 +2291,7 @@ local aa = {
             assert(x.Default, "AddColorPicker: Missing default value.")
             local z = {
                 Value = x.Default,
+                Default = x.Default,
                 Transparency = x.Transparency or 0,
                 Type = "Colorpicker",
                 Title = type(x.Title) == "string" and x.Title or "Colorpicker",
@@ -3188,6 +3189,7 @@ local aa = {
             local h, i =
                 {
                     Value = f.Default or "",
+                    Default = f.Default or "",
                     Numeric = f.Numeric or false,
                     Finished = f.Finished or false,
                     Callback = f.Callback or function(h)
@@ -3263,6 +3265,7 @@ local aa = {
             local h, i, j =
                 {
                     Value = f.Default,
+                    Default = f.Default,
                     Toggled = false,
                     Mode = f.Mode or "Toggle",
                     Type = "Keybind",
@@ -3469,7 +3472,7 @@ local aa = {
             assert(f.Max, "Slider - Missing maximum value.")
             assert(f.Rounding, "Slider - Missing rounding value.")
             local h, i, j =
-                {Value = nil, Min = f.Min, Max = f.Max, Rounding = f.Rounding, Callback = f.Callback or function(h)
+                {Value = nil, Default = f.Default, Min = f.Min, Max = f.Max, Rounding = f.Rounding, Callback = f.Callback or function(h)
                         end, Type = "Slider"},
                 false,
                 ac(aj.Element)(f.Title, f.Description, d.Container, false)
@@ -3594,7 +3597,7 @@ local aa = {
         function c.New(d, e, f)
             local g = d.Library
             assert(f.Title, "Toggle - Missing Title")
-            local h, i = {Value = f.Default or false, Callback = f.Callback or function(h)
+            local h, i = {Value = f.Default or false, Default = f.Default or false, Callback = f.Callback or function(h)
                         end, Type = "Toggle"}, ac(aj.Element)(f.Title, f.Description, d.Container, true)
             i.DescLabel.Size = UDim2.new(1, -54, 0, 14)
             h.SetTitle = i.SetTitle
