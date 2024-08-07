@@ -2905,6 +2905,11 @@ local aa = {
                 {BackgroundTransparency = 1, ZIndex = 125, Size = UDim2.fromOffset(170, 300), Parent = h.Library.GUI, Visible = false},
                 {u, e("UISizeConstraint", {MinSize = Vector2.new(170, 0)})}
             )
+            local lock =
+                e(
+                    "Frame",
+                    {BackgroundTransparency = 0, ZIndex = 125, Size = m.Frame.Size, Position = m.Frame.Position, Visible = false}
+                )
             table.insert(k.OpenFrames, v)
             local w, x = function()
                     local w = 0
@@ -2936,7 +2941,10 @@ local aa = {
                             Duration = 5,
                         }
                     end
-                    warn(p.Parent.Parent, p.ClassName, p.Name)
+                    warn(m.Name)
+                    for xawd, fawd in next, m do
+                        warn(xawd, fawd)
+                    end
                     l:Open()
                 end
             )
@@ -2970,7 +2978,6 @@ local aa = {
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
             end
-            
             function l.Display(B)
                 local C, D = l.Values, ""
                 if j.Multi then
