@@ -846,7 +846,7 @@ local aa = {
                     ZIndex = 135,
                     Size = UDim2.fromScale(1, 1),
                     Parent = q.Frame,
-                    Visible = false
+                    Visible = true
                 },
                 {
                     k("UICorner",{CornerRadius = UDim.new(0, 4)}),
