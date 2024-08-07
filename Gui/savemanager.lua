@@ -226,7 +226,7 @@ local SaveManager = {} do
 								elseif option.Type == "Keybind" then
 										option:SetValue(option.Default, option.Mode)
 								elseif option.Type == "Colorpicker" then
-										option:SetValue(option.Default)
+										option:SetValueRGB(option.Default)
 								end
 							end
 							self.Library.Reseting = false
