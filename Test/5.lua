@@ -2909,7 +2909,7 @@ local aa = {
                 e(
                     "Frame",
                     {
-                        ThemeTag = {BackgroundColor3 = "DropdownBorder"},
+                        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
                         BackgroundTransparency = 0.7,
                         ZIndex = 135,
                         Size = UDim2.fromScale(1, 1),
@@ -2921,8 +2921,8 @@ local aa = {
                             "ImageLabel",
                             {
                                 BackgroundTransparency = 1,
-                                Size = UDim2.new(0, 25, 0, 25),
-                                Position = UDim2.new(0.5, 0, 0.5, 0),
+                                Size = UDim2.fromOffset(62.5, 55),
+                                Position = UDim2.new(0.45, 0, 0.5, 0),
                                 AnchorPoint = Vector2.new(0.5, 0.5),
                                 Image = "http://www.roblox.com/asset/?id=3926305904",
                                 ImageRectOffset = Vector2.new(404, 364),
