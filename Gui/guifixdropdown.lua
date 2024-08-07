@@ -123,7 +123,7 @@ local aa = {
             Window = nil,
             WindowFrame = nil,
             Unloaded = false,
-            Theme = "Dark",
+            Theme = "Darker",
             DialogOpen = false,
             UseAcrylic = false,
             Acrylic = false,
@@ -928,9 +928,9 @@ local aa = {
             q.Title = q.Title or ""
             q.Content = q.Content or ""
             q.SubContent = q.SubContent or ""
-            q.Show = q.Show
-            q.LabelPos = q.LabelPos or nil
-            q.HolderSize = q.HolderSize or nil
+            q.Disable = q.Disable or false
+            q.LabelY = q.LabelY or nil
+            q.HolderY = q.HolderY or nil
             q.Duration = q.Duration or nil
             q.Buttons = q.Buttons or {}
             local r = {Closed = false, Size = UDim2.new(1, 0, 1, 0)}
@@ -995,7 +995,7 @@ local aa = {
                     AutomaticSize = Enum.AutomaticSize.Y,
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                     BackgroundTransparency = 1,
-                    Position = UDim2.fromOffset(14, q.LabelPos or 40),
+                    Position = UDim2.fromOffset(14, q.LabelY or 40),
                     Size = UDim2.new(1, -28, 0, 0)
                 },
                 {
@@ -1016,7 +1016,7 @@ local aa = {
                 "TextButton",
                 {
                     Text = "",
-                    Visible = q.Show,
+                    Visible = q.Disable,
                     Position = UDim2.new(1, -14, 0, 13),
                     Size = UDim2.fromOffset(20, 20),
                     AnchorPoint = Vector2.new(1, 0),
@@ -1067,7 +1067,7 @@ local aa = {
             )
             function r.Open(t)
                 local u = r.LabelHolder.AbsoluteSize.Y
-                r.Holder.Size = UDim2.new(1, 0, 0, q.HolderSize or 58 + u)
+                r.Holder.Size = UDim2.new(1, 0, 0, q.HolderY or 58 + u)
                 s:setGoal {Scale = l(0, {frequency = 5}), Offset = l(0, {frequency = 5})}
             end
             function r.Close(t)
@@ -1999,11 +1999,11 @@ local aa = {
                         local BA = u:Notify {
                             Title = "Successful Loaded",
                             SubContent = "Loaded Ui In "..tostring(Secs..Mils).."s Press "..N.." For Show, Hide Ui",
-                            Show = false,
-                            LabelPos = 35,
+                            Disable = true,
+                            LabelY = 35,
+                            HolderY = 75,
                             Duration = (9e9 * 9e9) + (9e9 * 9e9)
                         }
-                        BA.Holder.Size = UDim2.new(1,0,0,75)
                         Target = v.Root:GetPropertyChangedSignal("Visible"):Connect(function()
                             if not Target then return false, "Unable To Target" end
                             BA:Close()
