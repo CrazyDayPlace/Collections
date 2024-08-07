@@ -68,6 +68,7 @@ local InterfaceManager = {} do
 			Title = "Theme",
 			Description = "Changes the interface theme.",
 			Values = Library.Themes,
+			UnSelect = true,
 			Default = Settings.Theme,
 			Callback = function(Value)
 				Library:SetTheme(Value)
