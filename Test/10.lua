@@ -3003,18 +3003,25 @@ local aa = {
                 l.Locked = true
             end
             function l.UnLock(B)
-                af:Create(
-                    m.Locked,
-                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
-                    {BackgroundTransparency = 1}
-                ):Play()
-                af:Create(
-                    m.Locked.ImageLabel,
-                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
-                    {Size = UDim2.fromOffset(0, 0)}
-                ):Play().Completed:Wait()
-                m.Locked.Visible = false
-                l.Locked = false
+                task.spawn(
+                    function()
+                        af:Create(
+                            m.Locked,
+                            TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                            {BackgroundTransparency = 1}
+                        ):Play()
+                        local cod =
+                        af:Create(
+                            m.Locked.ImageLabel,
+                            TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                            {Size = UDim2.fromOffset(0, 0)}
+                        )
+                        cod:Play()
+                        cod.Completed:Wait()
+                        m.Locked.Visible = false
+                        l.Locked = false
+                    end
+                )
             end
             function l.Open(B)
                 l:BuildDropdownList()
