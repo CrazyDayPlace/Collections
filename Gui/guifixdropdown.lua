@@ -837,6 +837,34 @@ local aa = {
                 },
                 {k("UICorner", {CornerRadius = UDim.new(0, 4)}), q.Border, q.LabelHolder}
             )
+            q.Lock =
+            k(
+                "Frame",
+                {
+                    BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+                    BackgroundTransparency = 1,
+                    ZIndex = 135,
+                    Size = UDim2.fromScale(1, 1),
+                    Parent = q.Frame,
+                    Visible = true
+                },
+                {
+                    k("UICorner",{CornerRadius = UDim.new(0, 4)}),
+                    k(
+                        "ImageLabel",
+                        {
+                            BackgroundTransparency = 1,
+                            Size = UDim2.fromOffset(0, 0),
+                            Position = UDim2.new(0.5, 0, 0.5, 0),
+                            AnchorPoint = Vector2.new(0.5, 0.5),
+                            Image = "http://www.roblox.com/asset/?id=3926305904",
+                            ImageRectOffset = Vector2.new(404, 364),
+                            ImageRectSize = Vector2.new(36, 36),
+                            ImageColor3 = Color3.fromRGB(255, 25, 25)
+                        }
+                    )
+                }
+            )
             function q.SetTitle(r, s)
                 q.TitleLabel.Text = s
             end
@@ -2786,7 +2814,7 @@ local aa = {
                     Multi = j.Multi,
                     Tables = {},
                     Buttons = {},
-                    IsLock = false,
+                    Locked = false,
                     Opened = false,
                     Type = "Dropdown",
                     Callback = j.Callback or function()
@@ -2928,13 +2956,8 @@ local aa = {
             c.AddSignal(
                 p.MouseButton1Click,
                 function()
-                    if l.IsLock then
-                        return ac(aj):Notify {
-                            Title = "Dropdown is locked",
-                            SubContent = type(l.IsLock) == "string" and l.IsLock or "",
-                            Disable = true,
-                            Duration = 5,
-                        }
+                    if l.Locked then
+                        return
                     end
                     l:Open()
                 end
@@ -2951,6 +2974,34 @@ local aa = {
                 end
             )
             local A = h.ScrollFrame
+            function l.Lock(B)
+                local Q = m.DescLabel.TextBounds.Y + 30
+                af:Create(
+                    m.Lock,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {BackgroundTransparency = 0.5}
+                ):Play()
+                af:Create(
+                    m.Lock.ImageLabel,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {Size = UDim2.fromOffset(Q, Q)}
+                ):Play()
+                l:Close()
+                l.Locked = true
+            end
+            function l.UnLock(B)
+                af:Create(
+                    m.Lock,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {BackgroundTransparency = 1}
+                ):Play()
+                af:Create(
+                    m.Lock.ImageLabel,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {Size = UDim2.fromOffset(0, 0)}
+                ):Play()
+                l.Locked = false
+            end
             function l.Open(B)
                 l:BuildDropdownList()
                 l.Opened = true
@@ -3076,7 +3127,7 @@ local aa = {
                              then
                                 local U = not N
                                 if j.Lock and l:GetActiveValues() == 1 and not U and not j.AllowNull then
-                                elseif l.IsLock then l:Close()
+                                elseif l.Locked then l:Close()
                                 else
                                     if j.Multi then
                                         N = U
