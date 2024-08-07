@@ -1085,12 +1085,25 @@ local aa = {
                     )
                 end
             end
+            function r.Callback(t, z, ...)
+                if not z then
+                    return
+                end
+                local A, B = pcall(z, ...)
+                r:Close()
+            end
             r:Open()
-            if q.Duration then
+            if q.Duration and type(q.Duration) == "number" then
                 task.delay(
                     q.Duration,
                     function()
                         r:Close()
+                    end
+                )
+            elseif q.Duration and type(q.Duration) == "function" then
+                task.spawn(
+                    function()
+                        r:Callback(q.Duration)
                     end
                 )
             end
