@@ -2942,8 +2942,8 @@ local aa = {
                 end
             )
             local A = h.ScrollFrame
-            l:BuildDropdownList()
             function l.Open(B)
+                l:BuildDropdownList()
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
