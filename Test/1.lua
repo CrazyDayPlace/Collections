@@ -755,7 +755,7 @@ local aa = {
         local i, j = e(h.Packages.Flipper), e(h.Creator)
         local k, l = j.New, i.Spring.new
         return function(m, n, o, p)
-            local q = {}
+            local q, ts = {IsLocked = false}, game:GetService "TweenService"
             q.TitleLabel =
                 k(
                 "TextLabel",
@@ -846,7 +846,7 @@ local aa = {
                     ZIndex = 135,
                     Size = UDim2.fromScale(1, 1),
                     Parent = q.Frame,
-                    Visible = false
+                    Visible = true
                 },
                 {
                     k("UICorner",{CornerRadius = UDim.new(0, 4)}),
@@ -878,24 +878,41 @@ local aa = {
                     q.DescLabel.Visible = true
                 end
                 q.DescLabel.Text = s
-                if q.Locked.Visible then
-                    task.spawn(
-                        function()
-                            local AF, QF = game:GetService "TweenService", q.DescLabel.TextBounds.Y + 30
-                            AF:Create(
-                                q.Locked.ImageLabel,
-                                TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
-                                {Size = UDim2.fromOffset(QF, QF)}
-                            ):Play()
-                        end
-                    )
-                end
+                ts:Create(q.Locked.ImageLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1), {Size = UDim2.fromOffset(q.DescLabel.TextBounds.Y + 30, q.DescLabel.TextBounds.Y + 30)}):Play()
+            end
+            function q.Lock(r)
+                q.Locked.ImageLabel.Size = UDim2.fromOffset(0, 0)
+                ts:Create(
+                    q.Locked,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {BackgroundTransparency = 0.5}
+                ):Play()
+                ts:Create(
+                    q.Locked.ImageLabel,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {Size = UDim2.fromOffset(q.DescLabel.TextBounds.Y + 30, q.DescLabel.TextBounds.Y + 30)}
+                ):Play()
+                q.IsLocked = true
+            end
+            function q.UnLock(r)
+                ts:Create(
+                    q.Locked,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {BackgroundTransparency = 1}
+                ):Play()
+                ts:Create(
+                    q.Locked.ImageLabel,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {Size = UDim2.fromOffset(0, 0)}
+                ):Play()
+                q.IsLocked = false
             end
             function q.Destroy(r)
                 q.Frame:Destroy()
             end
             q:SetTitle(m)
             q:SetDesc(n)
+            q.Locked.ImageLabel.Size = UDim2.fromOffset(0, 0)
             if p then
                 local r, s, t =
                     h.Themes,
@@ -2826,7 +2843,6 @@ local aa = {
                     Multi = j.Multi,
                     Tables = {},
                     Buttons = {},
-                    Locked = false,
                     Opened = false,
                     Type = "Dropdown",
                     Callback = j.Callback or function()
@@ -2836,6 +2852,8 @@ local aa = {
             m.DescLabel.Size = UDim2.new(1, -170, 0, 14)
             l.SetTitle = m.SetTitle
             l.SetDesc = m.SetDesc
+            l.Lock = m.Lock
+            l.UnLock = m.UnLock
             local n, o =
                 e(
                     "TextLabel",
@@ -2968,7 +2986,7 @@ local aa = {
             c.AddSignal(
                 p.MouseButton1Click,
                 function()
-                    if l.Locked then
+                    if m.IsLocked then
                         return
                     end
                     l:Open()
@@ -2986,39 +3004,6 @@ local aa = {
                 end
             )
             local A = h.ScrollFrame
-            function l.Lock(B)
-                m.Locked.Visible = true
-                local Q = m.DescLabel.TextBounds.Y + 30
-                af:Create(
-                    m.Locked,
-                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
-                    {BackgroundTransparency = 0.5}
-                ):Play()
-                af:Create(
-                    m.Locked.ImageLabel,
-                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
-                    {Size = UDim2.fromOffset(Q, Q)}
-                ):Play()
-                l:Close()
-                l.Locked = true
-            end
-            function l.UnLock(B)
-                af:Create(
-                    m.Locked,
-                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
-                    {BackgroundTransparency = 1}
-                ):Play()
-                local cod =
-                af:Create(
-                    m.Locked.ImageLabel,
-                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
-                    {Size = UDim2.fromOffset(0, 0)}
-                )
-                cod:Play()
-                cod.Completed:Wait()
-                m.Locked.Visible = false
-                l.Locked = false
-            end
             function l.Open(B)
                 l:BuildDropdownList()
                 l.Opened = true
@@ -3144,7 +3129,7 @@ local aa = {
                              then
                                 local U = not N
                                 if j.Lock and l:GetActiveValues() == 1 and not U and not j.AllowNull then
-                                elseif l.Locked then l:Close()
+                                elseif m.IsLocked then l:Close()
                                 else
                                     if j.Multi then
                                         N = U
