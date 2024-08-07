@@ -1086,10 +1086,17 @@ local aa = {
                 end
             end
             r:Open()
-            if q.Duration then
+            if q.Duration and type(q.Duration) == "number" then
                 task.delay(
                     q.Duration,
                     function()
+                        r:Close()
+                    end
+                )
+            elseif q.Duration and type(q.Duration) == "function" then
+                task.spawn(
+                    function()
+                        r:SafeCallback(q.Duration)
                         r:Close()
                     end
                 )
