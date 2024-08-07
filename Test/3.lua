@@ -2772,7 +2772,7 @@ local aa = {
             game:GetService "Players".LocalPlayer:GetMouse(),
             game:GetService "Workspace".CurrentCamera,
             ab.Parent.Parent
-        local c, d, n7 = ac(aj.Creator), ac(aj.Packages.Flipper), ac(aj)
+        local c, d = ac(aj.Creator), ac(aj.Packages.Flipper)
         local e, f, g = c.New, aj.Components, {}
         g.__index = g
         g.__type = "Dropdown"
@@ -2929,11 +2929,15 @@ local aa = {
                 p.MouseButton1Click,
                 function()
                     if l.IsLock then
-                        return
+                        return ac(aj):Notify {
+                            Title = "Dropdown is locked",
+                            SubContent = type(l.IsLock) == "string" and l.IsLock or "",
+                            Disable = true,
+                            Duration = 5,
+                        }
                     end
-                    n7:Notify {
-                        Title = "open dropdown"
-                    }
+                    warn(p.Parent.Parent, p.ClassName, p.Name)
+                    p.Parent.Parent.Visible = not p.Parent.Parent.Visible
                     l:Open()
                 end
             )
@@ -2967,6 +2971,7 @@ local aa = {
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
             end
+            
             function l.Display(B)
                 local C, D = l.Values, ""
                 if j.Multi then
@@ -3074,6 +3079,7 @@ local aa = {
                              then
                                 local U = not N
                                 if j.Lock and l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                elseif l.IsLock then l:Close()
                                 else
                                     if j.Multi then
                                         N = U
