@@ -842,18 +842,19 @@ local aa = {
                 "Frame",
                 {
                     BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-                    BackgroundTransparency = 0.7,
+                    BackgroundTransparency = 1,
                     ZIndex = 135,
                     Size = UDim2.fromScale(1, 1),
                     Parent = q.Frame,
                     Visible = true
                 },
                 {
+                    k("UICorner",{CornerRadius = UDim.new(0, 4)}),
                     k(
                         "ImageLabel",
                         {
                             BackgroundTransparency = 1,
-                            Size = UDim2.fromOffset(57.5, 55),
+                            Size = UDim2.fromOffset(0, 0),
                             Position = UDim2.new(0.45, 0, 0.5, 0),
                             AnchorPoint = Vector2.new(0.5, 0.5),
                             Image = "http://www.roblox.com/asset/?id=3926305904",
@@ -876,10 +877,6 @@ local aa = {
                 else
                     q.DescLabel.Visible = true
                 end
-                warn("LabelHolder "..q.LabelHolder.Size)
-                warn("TitleLabel "..q.TitleLabel.Size)
-                warn("DescLabel "..q.DescLabel.Size)
-                warn("Frame "..q.Frame.Size)
                 q.DescLabel.Text = s
             end
             function q.Destroy(r)
@@ -2960,16 +2957,7 @@ local aa = {
                 p.MouseButton1Click,
                 function()
                     if l.IsLock then
-                        return ac(aj):Notify {
-                            Title = "Dropdown is locked",
-                            SubContent = type(l.IsLock) == "string" and l.IsLock or "",
-                            Disable = true,
-                            Duration = 5,
-                        }
-                    end
-                    warn(m.Name)
-                    for xawd, fawd in next, m do
-                        warn(xawd, fawd)
+                        return
                     end
                     l:Open()
                 end
@@ -2986,6 +2974,34 @@ local aa = {
                 end
             )
             local A = h.ScrollFrame
+            function l.Lock(B)
+                local Q = m.DescLabel.TextBounds.Y + 30
+                af:Create(
+                    m.Lock,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {BackgroundTransparency = 0.5}
+                ):Play()
+                af:Create(
+                    m.Lock.ImageLabel,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {Size = UDim2.fromOffset(Q, Q)}
+                ):Play()
+                l:Close()
+                l.IsLock = true
+            end
+            function l.UnLock(B)
+                af:Create(
+                    m.Lock,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {BackgroundTransparency = 1}
+                ):Play()
+                af:Create(
+                    m.Lock.ImageLabel,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {Size = UDim2.fromOffset(0, 0)}
+                ):Play()
+                l.IsLock = false
+            end
             function l.Open(B)
                 l:BuildDropdownList()
                 l.Opened = true
