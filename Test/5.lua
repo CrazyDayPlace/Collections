@@ -837,6 +837,33 @@ local aa = {
                 },
                 {k("UICorner", {CornerRadius = UDim.new(0, 4)}), q.Border, q.LabelHolder}
             )
+            q.Lock =
+            k(
+                "Frame",
+                {
+                    BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+                    BackgroundTransparency = 0.7,
+                    ZIndex = 135,
+                    Size = UDim2.fromScale(1, 1),
+                    Parent = q.Frame,
+                    Visible = true
+                },
+                {
+                    k(
+                        "ImageLabel",
+                        {
+                            BackgroundTransparency = 1,
+                            Size = UDim2.fromOffset(57.5, 55),
+                            Position = UDim2.new(0.45, 0, 0.5, 0),
+                            AnchorPoint = Vector2.new(0.5, 0.5),
+                            Image = "http://www.roblox.com/asset/?id=3926305904",
+                            ImageRectOffset = Vector2.new(404, 364),
+                            ImageRectSize = Vector2.new(36, 36),
+                            ImageColor3 = Color3.fromRGB(255, 25, 25)
+                        }
+                    )
+                }
+            )
             function q.SetTitle(r, s)
                 q.TitleLabel.Text = s
             end
@@ -850,12 +877,14 @@ local aa = {
                     q.DescLabel.Visible = true
                 end
                 q.DescLabel.Text = s
+                q.Lock.ImageLabel.Size = UDim2.fromOffset(q.DescLabel.TextBounds.Y + 35, q.DescLabel.TextBounds.Y + 35)
             end
             function q.Destroy(r)
                 q.Frame:Destroy()
             end
             q:SetTitle(m)
             q:SetDesc(n)
+            q.Lock.ImageLabel.Size = UDim2.fromOffset(q.DescLabel.TextBounds.Y + 35, q.DescLabel.TextBounds.Y + 35)
             if p then
                 local r, s, t =
                     h.Themes,
@@ -2905,34 +2934,6 @@ local aa = {
                 {BackgroundTransparency = 1, ZIndex = 125, Size = UDim2.fromOffset(170, 300), Parent = h.Library.GUI, Visible = false},
                 {u, e("UISizeConstraint", {MinSize = Vector2.new(170, 0)})}
             )
-            local Lock =
-                e(
-                    "Frame",
-                    {
-                        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-                        BackgroundTransparency = 0.7,
-                        ZIndex = 135,
-                        Size = UDim2.fromScale(1, 1),
-                        Parent = p.Parent,
-                        Visible = true
-                    },
-                    {
-                        e(
-                            "ImageLabel",
-                            {
-                                BackgroundTransparency = 1,
-                                Size = UDim2.fromOffset(62.5, 55),
-                                Position = UDim2.new(0.45, 0, 0.5, 0),
-                                AnchorPoint = Vector2.new(0.5, 0.5),
-                                Image = "http://www.roblox.com/asset/?id=3926305904",
-                                ImageRectOffset = Vector2.new(404, 364),
-                                ImageRectSize = Vector2.new(36, 36),
-                                ImageColor3 = Color3.fromRGB(255, 25, 25)
-                            }
-                        )
-                    }
-
-                )
             table.insert(k.OpenFrames, v)
             local w, x = function()
                     local w = 0
