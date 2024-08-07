@@ -2942,23 +2942,23 @@ local aa = {
                 end
             )
             local A = h.ScrollFrame
+            l:BuildDropdownList()
             function l.Open(B)
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
-                l:BuildDropdownList()
             end
             function l.Close(B)
-                l.Opened = false
-                A.ScrollingEnabled = true
-                u.Size = UDim2.fromScale(1, 0.6)
-                v.Visible = false
                 for E, F in next, t:GetChildren() do
                     if not F:IsA "UIListLayout" then
                         F:Destroy()
                     end
                 end
+                l.Opened = false
+                A.ScrollingEnabled = true
+                u.Size = UDim2.fromScale(1, 0.6)
+                v.Visible = false
             end
             function l.Display(B)
                 local C, D = l.Values, ""
