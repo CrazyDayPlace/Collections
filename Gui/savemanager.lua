@@ -205,6 +205,7 @@ local SaveManager = {} do
 						{Title = "Yes", Callback = function()
 							for idx, option in next, SaveManager.Options do
 								if self.Ignore[idx] then continue end
+								self.Library.Reseting = true
 								if option.Type == "Dropdown" then
 									if option.Multi then
 										local B = {}
@@ -228,6 +229,7 @@ local SaveManager = {} do
 										option:SetValue(option.Default)
 								end
 							end
+							self.Library.Reseting = false
 						end},
 						{Title = "No"}
 					}
