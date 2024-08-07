@@ -837,6 +837,33 @@ local aa = {
                 },
                 {k("UICorner", {CornerRadius = UDim.new(0, 4)}), q.Border, q.LabelHolder}
             )
+            q.Lock =
+            k(
+                "Frame",
+                {
+                    BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+                    BackgroundTransparency = 1,
+                    ZIndex = 135,
+                    Size = UDim2.fromScale(1, 1),
+                    Parent = q.Frame,
+                    Visible = true
+                },
+                {
+                    k(
+                        "ImageLabel",
+                        {
+                            BackgroundTransparency = 1,
+                            Size = UDim2.fromOffset(0, 0),
+                            Position = UDim2.new(0.45, 0, 0.5, 0),
+                            AnchorPoint = Vector2.new(0.5, 0.5),
+                            Image = "http://www.roblox.com/asset/?id=3926305904",
+                            ImageRectOffset = Vector2.new(404, 364),
+                            ImageRectSize = Vector2.new(36, 36),
+                            ImageColor3 = Color3.fromRGB(255, 25, 25)
+                        }
+                    )
+                }
+            )
             function q.SetTitle(r, s)
                 q.TitleLabel.Text = s
             end
@@ -2905,34 +2932,6 @@ local aa = {
                 {BackgroundTransparency = 1, ZIndex = 125, Size = UDim2.fromOffset(170, 300), Parent = h.Library.GUI, Visible = false},
                 {u, e("UISizeConstraint", {MinSize = Vector2.new(170, 0)})}
             )
-            local Lock =
-                e(
-                    "Frame",
-                    {
-                        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-                        BackgroundTransparency = 0.7,
-                        ZIndex = 135,
-                        Size = UDim2.fromScale(1, 1),
-                        Parent = p.Parent,
-                        Visible = true
-                    },
-                    {
-                        e(
-                            "ImageLabel",
-                            {
-                                BackgroundTransparency = 1,
-                                Size = UDim2.new(0, 25, 0, 25),
-                                Position = UDim2.new(0.45, 0, 0.5, 0),
-                                AnchorPoint = Vector2.new(0.5, 0.5),
-                                Image = "http://www.roblox.com/asset/?id=3926305904",
-                                ImageRectOffset = Vector2.new(404, 364),
-                                ImageRectSize = Vector2.new(36, 36),
-                                ImageColor3 = Color3.fromRGB(255, 25, 25)
-                            }
-                        )
-                    }
-
-                )
             table.insert(k.OpenFrames, v)
             local w, x = function()
                     local w = 0
@@ -2964,10 +2963,6 @@ local aa = {
                             Duration = 5,
                         }
                     end
-                    warn(m.Name)
-                    for xawd, fawd in next, m do
-                        warn(xawd, fawd)
-                    end
                     l:Open()
                 end
             )
@@ -2983,6 +2978,21 @@ local aa = {
                 end
             )
             local A = h.ScrollFrame
+            function l.Lock(B, C)
+                local Q = m.DescLabel.TextBounds.Y + 35
+                C.Text = C.Text or ""
+                af:Create(
+                    m.Lock,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {BackgroundTransparency = 0.7}
+                ):Play()
+                af:Create(
+                    m.Lock.ImageLabel,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {Size = UDim2.fromOffset(Q, Q)}
+                ):Play()
+                l.IsLock = C.Text
+            end
             function l.Open(B)
                 l:BuildDropdownList()
                 l.Opened = true
