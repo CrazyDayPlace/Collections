@@ -837,7 +837,7 @@ local aa = {
                 },
                 {k("UICorner", {CornerRadius = UDim.new(0, 4)}), q.Border, q.LabelHolder}
             )
-            q.Lock =
+            q.Locked =
             k(
                 "Frame",
                 {
@@ -846,15 +846,16 @@ local aa = {
                     ZIndex = 135,
                     Size = UDim2.fromScale(1, 1),
                     Parent = q.Frame,
-                    Visible = true
+                    Visible = false
                 },
                 {
+                    k("UICorner",{CornerRadius = UDim.new(0, 4)}),
                     k(
                         "ImageLabel",
                         {
                             BackgroundTransparency = 1,
                             Size = UDim2.fromOffset(0, 0),
-                            Position = UDim2.new(0.45, 0, 0.5, 0),
+                            Position = UDim2.new(0.475, 0, 0.5, 0),
                             AnchorPoint = Vector2.new(0.5, 0.5),
                             Image = "http://www.roblox.com/asset/?id=3926305904",
                             ImageRectOffset = Vector2.new(404, 364),
@@ -877,6 +878,18 @@ local aa = {
                     q.DescLabel.Visible = true
                 end
                 q.DescLabel.Text = s
+                if q.Locked.Visible then
+                    task.spawn(
+                        function()
+                            local AF, QF = game:GetService "TweenService", q.DescLabel.TextBounds.Y + 30
+                            AF:Create(
+                                q.Locked.ImageLabel,
+                                TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                                {Size = UDim2.fromOffset(QF, QF)}
+                            ):Play()
+                        end
+                    )
+                end
             end
             function q.Destroy(r)
                 q.Frame:Destroy()
@@ -2813,7 +2826,7 @@ local aa = {
                     Multi = j.Multi,
                     Tables = {},
                     Buttons = {},
-                    IsLock = false,
+                    Locked = false,
                     Opened = false,
                     Type = "Dropdown",
                     Callback = j.Callback or function()
@@ -2955,7 +2968,7 @@ local aa = {
             c.AddSignal(
                 p.MouseButton1Click,
                 function()
-                    if l.IsLock then
+                    if l.Locked then
                         return
                     end
                     l:Open()
@@ -2974,32 +2987,37 @@ local aa = {
             )
             local A = h.ScrollFrame
             function l.Lock(B)
+                m.Locked.Visible = true
                 local Q = m.DescLabel.TextBounds.Y + 30
                 af:Create(
-                    m.Lock,
+                    m.Locked,
                     TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
                     {BackgroundTransparency = 0.5}
                 ):Play()
                 af:Create(
-                    m.Lock.ImageLabel,
+                    m.Locked.ImageLabel,
                     TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
                     {Size = UDim2.fromOffset(Q, Q)}
                 ):Play()
                 l:Close()
-                l.IsLock = true
+                l.Locked = true
             end
             function l.UnLock(B)
                 af:Create(
-                    m.Lock,
+                    m.Locked,
                     TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
                     {BackgroundTransparency = 1}
                 ):Play()
+                local cod =
                 af:Create(
-                    m.Lock.ImageLabel,
+                    m.Locked.ImageLabel,
                     TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
                     {Size = UDim2.fromOffset(0, 0)}
-                ):Play()
-                l.IsLock = false
+                )
+                cod:Play()
+                cod.Completed:Wait()
+                m.Locked.Visible = false
+                l.Locked = false
             end
             function l.Open(B)
                 l:BuildDropdownList()
@@ -3126,7 +3144,7 @@ local aa = {
                              then
                                 local U = not N
                                 if j.Lock and l:GetActiveValues() == 1 and not U and not j.AllowNull then
-                                elseif l.IsLock then l:Close()
+                                elseif l.Locked then l:Close()
                                 else
                                     if j.Multi then
                                         N = U
