@@ -2905,6 +2905,34 @@ local aa = {
                 {BackgroundTransparency = 1, ZIndex = 125, Size = UDim2.fromOffset(170, 300), Parent = h.Library.GUI, Visible = false},
                 {u, e("UISizeConstraint", {MinSize = Vector2.new(170, 0)})}
             )
+            local Lock =
+                e(
+                    "Frame",
+                    {
+                        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+                        BackgroundTransparency = 0.7,
+                        ZIndex = 135,
+                        Size = UDim2.fromScale(1, 1),
+                        Parent = p.Parent,
+                        Visible = true
+                    },
+                    {
+                        e(
+                            "ImageLabel",
+                            {
+                                BackgroundTransparency = 1,
+                                Size = UDim2.new(0, 25, 0, 25),
+                                Position = UDim2.new(0.45, 0, 0.5, 0),
+                                AnchorPoint = Vector2.new(0.5, 0.5),
+                                Image = "http://www.roblox.com/asset/?id=3926305904",
+                                ImageRectOffset = Vector2.new(404, 364),
+                                ImageRectSize = Vector2.new(36, 36),
+                                ImageColor3 = Color3.fromRGB(255, 25, 25)
+                            }
+                        )
+                    }
+
+                )
             table.insert(k.OpenFrames, v)
             local w, x = function()
                     local w = 0
@@ -2930,12 +2958,15 @@ local aa = {
                 function()
                     if l.IsLock then
                         return ac(aj):Notify {
-                            Title = "Interface",
-                            Content = "Dropdown is locked",
+                            Title = "Dropdown is locked",
                             SubContent = type(l.IsLock) == "string" and l.IsLock or "",
                             Disable = true,
                             Duration = 5,
                         }
+                    end
+                    warn(m.Name)
+                    for xawd, fawd in next, m do
+                        warn(xawd, fawd)
                     end
                     l:Open()
                 end
