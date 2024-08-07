@@ -2908,7 +2908,7 @@ local aa = {
             local lock =
                 e(
                     "Frame",
-                    {Parent = n.Parent}
+                    {BackgroundTransparency = 0.5, ZIndex = 500, Size = UDim2.fromScale(1, 1), Parent = p.Parent, Visible = true}
                 )
             table.insert(k.OpenFrames, v)
             local w, x = function()
