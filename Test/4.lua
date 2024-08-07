@@ -2905,6 +2905,11 @@ local aa = {
                 {BackgroundTransparency = 1, ZIndex = 125, Size = UDim2.fromOffset(170, 300), Parent = h.Library.GUI, Visible = false},
                 {u, e("UISizeConstraint", {MinSize = Vector2.new(170, 0)})}
             )
+            local lock =
+                e(
+                    "Frame",
+                    {Parent = n.Parent}
+                )
             table.insert(k.OpenFrames, v)
             local w, x = function()
                     local w = 0
@@ -2929,9 +2934,17 @@ local aa = {
                 p.MouseButton1Click,
                 function()
                     if l.IsLock then
-                        return
+                        return ac(aj):Notify {
+                            Title = "Dropdown is locked",
+                            SubContent = type(l.IsLock) == "string" and l.IsLock or "",
+                            Disable = true,
+                            Duration = 5,
+                        }
                     end
-                    print(ac(aj))
+                    warn(m.Name)
+                    for xawd, fawd in next, m do
+                        warn(xawd, fawd)
+                    end
                     l:Open()
                 end
             )
@@ -3072,6 +3085,7 @@ local aa = {
                              then
                                 local U = not N
                                 if j.Lock and l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                elseif l.IsLock then l:Close()
                                 else
                                     if j.Multi then
                                         N = U
