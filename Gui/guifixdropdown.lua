@@ -1016,7 +1016,7 @@ local aa = {
                 "TextButton",
                 {
                     Text = "",
-                    Visible = q.Disable,
+                    Visible = not q.Disable,
                     Position = UDim2.new(1, -14, 0, 13),
                     Size = UDim2.fromOffset(20, 20),
                     AnchorPoint = Vector2.new(1, 0),
