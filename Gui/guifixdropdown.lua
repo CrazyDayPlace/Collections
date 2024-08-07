@@ -2786,6 +2786,7 @@ local aa = {
                     Multi = j.Multi,
                     Tables = {},
                     Buttons = {},
+                    IsLock = false,
                     Opened = false,
                     Type = "Dropdown",
                     Callback = j.Callback or function()
@@ -2927,6 +2928,14 @@ local aa = {
             c.AddSignal(
                 p.MouseButton1Click,
                 function()
+                    if l.IsLock then
+                        return ac(aj):Notify {
+                            Title = "Dropdown is locked",
+                            SubContent = type(l.IsLock) == "string" and l.IsLock or "",
+                            Disable = true,
+                            Duration = 5,
+                        }
+                    end
                     l:Open()
                 end
             )
@@ -3067,6 +3076,7 @@ local aa = {
                              then
                                 local U = not N
                                 if j.Lock and l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                elseif l.IsLock then l:Close()
                                 else
                                     if j.Multi then
                                         N = U
