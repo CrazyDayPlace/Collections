@@ -2006,23 +2006,19 @@ local aa = {
                     C = true
                     local N = u.MinimizeKeybind and u.MinimizeKeybind.Value or u.MinimizeKey.Name
                     if TT then
-                        local Tick, Target = tick() - Time, nil
+                        local Tick = tick() - Time
                         local Secs = math.floor(Tick) % ((9e9 * 9e9) + (9e9 * 9e9))
                         local Mils = string.format(".%.03d", (Tick % 1) * 1000)
-                        local BA = u:Notify {
+                        u:Notify {
                             Title = "Successful Loaded",
                             SubContent = "Loaded Ui In "..tostring(Secs..Mils).."s Press "..N.." For Show, Hide Ui",
                             Disable = true,
                             LabelY = 35,
                             HolderY = 75,
-                            Duration = (9e9 * 9e9) + (9e9 * 9e9)
+                            Duration = function()
+                                repeat wait() until v.Root.Visible
+                            end
                         }
-                        Target = v.Root:GetPropertyChangedSignal("Visible"):Connect(function()
-                            if not Target then return false, "Unable To Target" end
-                            BA:Close()
-                            Target:Disconnect()
-                            Target = nil
-                        end)
                     end
                 end
             end
@@ -2790,6 +2786,7 @@ local aa = {
                     Multi = j.Multi,
                     Tables = {},
                     Buttons = {},
+                    IsLock = false,
                     Opened = false,
                     Type = "Dropdown",
                     Callback = j.Callback or function()
@@ -2931,6 +2928,10 @@ local aa = {
             c.AddSignal(
                 p.MouseButton1Click,
                 function()
+                    if l.IsLock then
+                        return
+                    end
+                    warn(l.Parent)
                     l:Open()
                 end
             )
@@ -2947,22 +2948,22 @@ local aa = {
             )
             local A = h.ScrollFrame
             function l.Open(B)
+                l:BuildDropdownList()
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
-                l:BuildDropdownList()
             end
             function l.Close(B)
-                l.Opened = false
-                A.ScrollingEnabled = true
-                u.Size = UDim2.fromScale(1, 0.6)
-                v.Visible = false
                 for E, F in next, t:GetChildren() do
                     if not F:IsA "UIListLayout" then
                         F:Destroy()
                     end
                 end
+                l.Opened = false
+                A.ScrollingEnabled = true
+                u.Size = UDim2.fromScale(1, 0.6)
+                v.Visible = false
             end
             function l.Display(B)
                 local C, D = l.Values, ""
