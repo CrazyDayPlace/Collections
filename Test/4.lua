@@ -123,7 +123,7 @@ local aa = {
             Window = nil,
             WindowFrame = nil,
             Unloaded = false,
-            Theme = "Dark",
+            Theme = "Darker",
             DialogOpen = false,
             UseAcrylic = false,
             Acrylic = false,
@@ -928,9 +928,9 @@ local aa = {
             q.Title = q.Title or ""
             q.Content = q.Content or ""
             q.SubContent = q.SubContent or ""
-            q.Show = q.Show
-            q.LabelPos = q.LabelPos or nil
-            q.HolderSize = q.HolderSize or nil
+            q.Disable = q.Disable or false
+            q.LabelY = q.LabelY or nil
+            q.HolderY = q.HolderY or nil
             q.Duration = q.Duration or nil
             q.Buttons = q.Buttons or {}
             local r = {Closed = false, Size = UDim2.new(1, 0, 1, 0)}
@@ -995,7 +995,7 @@ local aa = {
                     AutomaticSize = Enum.AutomaticSize.Y,
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                     BackgroundTransparency = 1,
-                    Position = UDim2.fromOffset(14, q.LabelPos or 40),
+                    Position = UDim2.fromOffset(14, q.LabelY or 40),
                     Size = UDim2.new(1, -28, 0, 0)
                 },
                 {
@@ -1016,7 +1016,7 @@ local aa = {
                 "TextButton",
                 {
                     Text = "",
-                    Visible = q.Show,
+                    Visible = not q.Disable,
                     Position = UDim2.new(1, -14, 0, 13),
                     Size = UDim2.fromOffset(20, 20),
                     AnchorPoint = Vector2.new(1, 0),
@@ -1067,7 +1067,7 @@ local aa = {
             )
             function r.Open(t)
                 local u = r.LabelHolder.AbsoluteSize.Y
-                r.Holder.Size = UDim2.new(1, 0, 0, q.HolderSize or 58 + u)
+                r.Holder.Size = UDim2.new(1, 0, 0, q.HolderY or 58 + u)
                 s:setGoal {Scale = l(0, {frequency = 5}), Offset = l(0, {frequency = 5})}
             end
             function r.Close(t)
@@ -1085,12 +1085,25 @@ local aa = {
                     )
                 end
             end
+            function r.Callback(t, z, ...)
+                if not z then
+                    return
+                end
+                local A, B = pcall(z, ...)
+                r:Close()
+            end
             r:Open()
-            if q.Duration then
+            if q.Duration and type(q.Duration) == "number" then
                 task.delay(
                     q.Duration,
                     function()
                         r:Close()
+                    end
+                )
+            elseif q.Duration and type(q.Duration) == "function" then
+                task.spawn(
+                    function()
+                        r:Callback(q.Duration)
                     end
                 )
             end
@@ -1993,23 +2006,19 @@ local aa = {
                     C = true
                     local N = u.MinimizeKeybind and u.MinimizeKeybind.Value or u.MinimizeKey.Name
                     if TT then
-                        local Tick, Target = tick() - Time, nil
+                        local Tick = tick() - Time
                         local Secs = math.floor(Tick) % ((9e9 * 9e9) + (9e9 * 9e9))
                         local Mils = string.format(".%.03d", (Tick % 1) * 1000)
-                        local BA = u:Notify {
+                        u:Notify {
                             Title = "Successful Loaded",
                             SubContent = "Loaded Ui In "..tostring(Secs..Mils).."s Press "..N.." For Show, Hide Ui",
-                            Show = false,
-                            LabelPos = 35,
-                            Duration = (9e9 * 9e9) + (9e9 * 9e9)
+                            Disable = true,
+                            LabelY = 35,
+                            HolderY = 75,
+                            Duration = function()
+                                repeat wait() until v.Root.Visible
+                            end
                         }
-                        BA.Holder.Size = UDim2.new(1,0,0,75)
-                        Target = v.Root:GetPropertyChangedSignal("Visible"):Connect(function()
-                            if not Target then return false, "Unable To Target" end
-                            BA:Close()
-                            Target:Disconnect()
-                            Target = nil
-                        end)
                     end
                 end
             end
@@ -2291,6 +2300,7 @@ local aa = {
             assert(x.Default, "AddColorPicker: Missing default value.")
             local z = {
                 Value = x.Default,
+                Default = x.Default,
                 Transparency = x.Transparency or 0,
                 Type = "Colorpicker",
                 Title = type(x.Title) == "string" and x.Title or "Colorpicker",
@@ -2776,6 +2786,7 @@ local aa = {
                     Multi = j.Multi,
                     Tables = {},
                     Buttons = {},
+                    IsLock = false,
                     Opened = false,
                     Type = "Dropdown",
                     Callback = j.Callback or function()
@@ -2917,6 +2928,10 @@ local aa = {
             c.AddSignal(
                 p.MouseButton1Click,
                 function()
+                    if l.IsLock then
+                        return
+                    end
+                    print(ac(aj))
                     l:Open()
                 end
             )
@@ -2933,21 +2948,22 @@ local aa = {
             )
             local A = h.ScrollFrame
             function l.Open(B)
+                l:BuildDropdownList()
                 l.Opened = true
                 A.ScrollingEnabled = false
+                u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
-                l:BuildDropdownList()
             end
             function l.Close(B)
-                l.Opened = false
-                A.ScrollingEnabled = true
-                u.Size = UDim2.fromScale(1, 0.6)
-                v.Visible = false
                 for E, F in next, t:GetChildren() do
                     if not F:IsA "UIListLayout" then
                         F:Destroy()
                     end
                 end
+                l.Opened = false
+                A.ScrollingEnabled = true
+                u.Size = UDim2.fromScale(1, 0.6)
+                v.Visible = false
             end
             function l.Display(B)
                 local C, D = l.Values, ""
@@ -2976,11 +2992,6 @@ local aa = {
             end
             function l.BuildDropdownList(B)
                 local C, D = l.Values, {}
-                for E, F in next, t:GetChildren() do
-                    if not F:IsA "UIListLayout" then
-                        F:Destroy()
-                    end
-                end
                 local G = 0
                 for H, I in next, C do
                     local J = {}
@@ -3127,6 +3138,8 @@ local aa = {
                         l.Value = nil
                     elseif table.find(l.Values, C) then
                         l.Value = C
+                    elseif type(C) == "number" and l.Values[C] and table.find(l.Values, l.Values[C]) then
+                        l.Value = l.Values[C]
                     end
                 end
                 l:Display()
@@ -3192,6 +3205,7 @@ local aa = {
             local h, i =
                 {
                     Value = f.Default or "",
+                    Default = f.Default or "",
                     Numeric = f.Numeric or false,
                     Finished = f.Finished or false,
                     Callback = f.Callback or function(h)
@@ -3267,6 +3281,7 @@ local aa = {
             local h, i, j =
                 {
                     Value = f.Default,
+                    Default = f.Default,
                     Toggled = false,
                     Mode = f.Mode or "Toggle",
                     Type = "Keybind",
@@ -3473,7 +3488,7 @@ local aa = {
             assert(f.Max, "Slider - Missing maximum value.")
             assert(f.Rounding, "Slider - Missing rounding value.")
             local h, i, j =
-                {Value = nil, Min = f.Min, Max = f.Max, Rounding = f.Rounding, Callback = f.Callback or function(h)
+                {Value = nil, Default = f.Default, Min = f.Min, Max = f.Max, Rounding = f.Rounding, Callback = f.Callback or function(h)
                         end, Type = "Slider"},
                 false,
                 ac(aj.Element)(f.Title, f.Description, d.Container, false)
@@ -3598,7 +3613,7 @@ local aa = {
         function c.New(d, e, f)
             local g = d.Library
             assert(f.Title, "Toggle - Missing Title")
-            local h, i = {Value = f.Default or false, Callback = f.Callback or function(h)
+            local h, i = {Value = f.Default or false, Default = f.Default or false, Callback = f.Callback or function(h)
                         end, Type = "Toggle"}, ac(aj.Element)(f.Title, f.Description, d.Container, true)
             i.DescLabel.Size = UDim2.new(1, -54, 0, 14)
             h.SetTitle = i.SetTitle
