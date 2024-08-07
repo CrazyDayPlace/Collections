@@ -2905,10 +2905,33 @@ local aa = {
                 {BackgroundTransparency = 1, ZIndex = 125, Size = UDim2.fromOffset(170, 300), Parent = h.Library.GUI, Visible = false},
                 {u, e("UISizeConstraint", {MinSize = Vector2.new(170, 0)})}
             )
-            local lock =
+            local Lock =
                 e(
                     "Frame",
-                    {BackgroundTransparency = 0, ZIndex = 125, Size = m.Frame.Size, Position = m.Frame.Position, Visible = false}
+                    {
+                        BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+                        BackgroundTransparency = 0.7,
+                        ZIndex = 135,
+                        Size = UDim2.fromScale(1, 1),
+                        Parent = p.Parent,
+                        Visible = true
+                    },
+                    {
+                        e(
+                            "ImageLabel",
+                            {
+                                BackgroundTransparency = 1,
+                                Size = Size = UDim2.fromScale(1, 1) + UDim2.fromOffset(25, 25),
+                                Position = UDim2.new(0.45, 0, 0.5, 0),
+                                AnchorPoint = Vector2.new(0.5, 0.5),
+                                Image = "http://www.roblox.com/asset/?id=3926305904",
+                                ImageRectOffset = Vector2.new(404, 364),
+                                ImageRectSize = Vector2.new(36, 36),
+                                ImageColor3 = Color3.fromRGB(255, 25, 25)
+                            }
+                        )
+                    }
+
                 )
             table.insert(k.OpenFrames, v)
             local w, x = function()
