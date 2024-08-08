@@ -3181,7 +3181,7 @@ local aa = {
                                     T.UserInputType == Enum.UserInputType.Touch
                              then
                                 local U = not N
-                                if not j.UnSelect and l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                if l:GetActiveValues() == 1 and not U and not j.AllowNull then
                                 elseif not k.Reseting and m.IsLocked then l:Close()
                                 else
                                     if j.Multi then
