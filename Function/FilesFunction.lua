@@ -67,7 +67,7 @@ local Files = {} do
     end
     function Files:ListFile(path)
         if not path then return false, "Unable To ListFile, Invail Path"
-        elseif not listfiles or not isfolder then return false, "Unable To ListFile, The Excutor Has Invaild ListFile Functions" 
+        elseif not listfiles or not isfolder then return false, "Unable To ListFile, The Excutor Has Invaild ListFile Functions"
         elseif path and not isfolder(path) then return false, "Unable To ListFile, Invail Folder To List" end
 
         local tables, name = {}, false
@@ -88,10 +88,16 @@ local Files = {} do
 				end
             else
                 if name and name:find(".lua") then
-                    name = name:gsub(".lua", "")
+                    local lua, find = name:find(".lua")
+                    if lua and find == name:len() then
+                        name = name:gsub(".lua", "")
+                    end
                 end
                 if name and name:find(".json") then
-                    name = name:gsub(".json", "")
+                    local json, find = name:find(".json")
+                    if json and find == name:len() then
+                        name = name:gsub(".json", "")
+                    end
                 end
 			end
             if name then
