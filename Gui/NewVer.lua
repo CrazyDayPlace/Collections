@@ -2858,7 +2858,6 @@ local aa = {
                     Value = j.Default,
                     Default = j.Default,
                     Multi = j.Multi,
-                    Search = j.Search,
                     Tables = {},
                     Buttons = {},
                     Opened = false,
@@ -3018,45 +3017,48 @@ local aa = {
                     end
                 end
             )
-            local se = ac(f.Textbox)()
-            se.Frame.Parent = t
-            se.Frame.Size = UDim2.new(1, -5, 0, 32)
-            se.Input.TextXAlignment = Enum.TextXAlignment.Center
-            se.Input.PlaceholderText = "Search."
-            se.Input.TextSize = 10
-            se.Frame.Visible = l.Search or false
-            c.AddSignal(se.Input:GetPropertyChangedSignal "Text",
-                function()
-                    if not l.Opened then
-                        return
+            local se
+            if j.Search then
+                se = ac(f.Textbox)()
+                se.Frame.Parent = t
+                se.Frame.Size = UDim2.new(1, -5, 0, 20)
+                se.Input.TextXAlignment = Enum.TextXAlignment.Center
+                se.Input.PlaceholderText = "Search."
+                se.Input.TextSize = 13
+                c.AddSignal(se.Input:GetPropertyChangedSignal "Text",
+                    function()
+                        if not l.Opened then
+                            return
+                        end
+                        l:UpdateSearch()
                     end
-                    l:UpdateSearch()
-                end
-            )
-            local A = h.ScrollFrame
-            function l.UpdateSearch(B)
-                for _, ButtonX in next, t:GetChildren() do
-                    if ButtonX:IsA "TextButton" then
-                        local searchtext = string.lower(se.Input.Text)
-                        if searchtext == "" then
-                            ButtonX.Visible = true
-                        else
-                            local buttontext = string.lower(ButtonX.ButtonLabel.Text)
-                            if string.find(buttontext, searchtext) then
+                )
+
+                function l.UpdateSearch(B)
+                    for _, ButtonX in next, t:GetChildren() do
+                        if ButtonX:IsA "TextButton" then
+                            local searchtext = string.lower(se.Input.Text)
+                            if searchtext == "" then
                                 ButtonX.Visible = true
                             else
-                                ButtonX.Visible = false
+                                local buttontext = string.lower(ButtonX.ButtonLabel.Text)
+                                if string.find(buttontext, searchtext) then
+                                    ButtonX.Visible = true
+                                else
+                                    ButtonX.Visible = false
+                                end
                             end
                         end
                     end
                 end
             end
+            local A = h.ScrollFrame
             function l.Open(B)
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
-                se.Input.Text = ""
+                if j.Search then se.Input.Text = "" end
                 if t:FindFirstChild("TextButton") == nil then
                     l:BuildDropdownList()
                 end
@@ -3066,7 +3068,7 @@ local aa = {
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
-                se.Input.Text = ""
+                if j.Search then se.Input.Text = "" end
             end
             function l.Display(B)
                 local C, D = l.Values, ""
@@ -3179,7 +3181,7 @@ local aa = {
                                     T.UserInputType == Enum.UserInputType.Touch
                              then
                                 local U = not N
-                                if j.UnSelect and l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                if not j.UnSelect and l:GetActiveValues() == 1 and not U and not j.AllowNull then
                                 elseif not k.Reseting and m.IsLocked then l:Close()
                                 else
                                     if j.Multi then
