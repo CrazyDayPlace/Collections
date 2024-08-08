@@ -3017,17 +3017,48 @@ local aa = {
                     end
                 end
             )
+            local se = ac(f.Textbox)()
+            se.Frame.Parent = t
+            se.Frame.Size = UDim2.new(1, -5, 0, 32)
+            se.Input.TextXAlignment = Enum.TextXAlignment.Center
+            se.Input.PlaceholderText = "Search."
+            c.AddSignal(se.Input:GetPropertyChangedSignal "Text",
+                function()
+                    if not l.Opened then
+                        return
+                    end
+                    l:UpdateSearch()
+                end
+            )
             local A = h.ScrollFrame
+            function l.UpdateSearch(B)
+                for _, ButtonX in next, t:GetChildren() do
+                    if ButtonX:IsA "TextButton" then
+                        local searchtext = string.lower(se.Input.Text)
+                        if searchtext == "" then
+                            ButtonX.Visible = true
+                        else
+                            local buttontext = string.lower(ButtonX.ButtonLabel.Text)
+                            if string.find(buttontext, searchtext) then
+                                ButtonX.Visible = true
+                            else
+                                ButtonX.Visible = false
+                            end
+                        end
+                    end
+                end
+            end
             function l.Open(B)
                 l:BuildDropdownList()
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
+                se.Input.Text = ""
             end
             function l.Close(B)
                 for E, F in next, t:GetChildren() do
-                    if not F:IsA "UIListLayout" then
+                    if F:IsA "TextButton" then
                         F:Destroy()
                     end
                 end
@@ -3035,6 +3066,7 @@ local aa = {
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
+                se.Input.Text = ""
             end
             function l.Display(B)
                 local C, D = l.Values, ""
