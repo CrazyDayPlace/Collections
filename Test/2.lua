@@ -3064,6 +3064,25 @@ local aa = {
             function l.BuildDropdownList(B)
                 local C, D = l.Values, {}
                 local G = 0
+                local SeArcH =
+                    e(
+                        "TextBox",
+                        {
+                            FontFace = Font.new "rbxasset://fonts/families/GothamSSm.json",
+                            TextColor3 = Color3.fromRGB(200, 200, 200),
+                            TextSize = 14,
+                            TextXAlignment = Enum.TextXAlignment.Left,
+                            TextYAlignment = Enum.TextYAlignment.Center,
+                            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+                            AutomaticSize = Enum.AutomaticSize.Y,
+                            BackgroundTransparency = 1,
+                            Size = UDim2.new(1, -5, 0, 32),
+                            Parent = t,
+                            PlaceholderText = "Search",
+                            ThemeTag = {TextColor3 = "Text", PlaceholderColor3 = "SubText"}
+                        },
+                        {e("UICorner", {CornerRadius = UDim.new(0, 6)})}
+                    )
                 for H, I in next, C do
                     local J = {}
                     G = G + 1
