@@ -123,7 +123,8 @@ local aa = {
             Window = nil,
             WindowFrame = nil,
             Unloaded = false,
-            Theme = "Dark",
+            Reseting = false,
+            Theme = "Darker",
             DialogOpen = false,
             UseAcrylic = false,
             Acrylic = false,
@@ -755,7 +756,7 @@ local aa = {
         local i, j = e(h.Packages.Flipper), e(h.Creator)
         local k, l = j.New, i.Spring.new
         return function(m, n, o, p)
-            local q = {}
+            local q, ts = {IsLocked = false}, game:GetService "TweenService"
             q.TitleLabel =
                 k(
                 "TextLabel",
@@ -837,6 +838,44 @@ local aa = {
                 },
                 {k("UICorner", {CornerRadius = UDim.new(0, 4)}), q.Border, q.LabelHolder}
             )
+            q.LockButton =
+            k(
+                "TextButton",
+                {
+                    BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+                    BackgroundTransparency = 1,
+                    ZIndex = 250,
+                    Size = UDim2.fromScale(1, 1),
+                    Parent = q.Frame,
+                    Visible = false
+                }
+            )
+            q.Locked =
+            k(
+                "Frame",
+                {
+                    BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+                    BackgroundTransparency = 1,
+                    ZIndex = 135,
+                    Size = UDim2.fromScale(1, 1),
+                    Parent = q.Frame,
+                    Visible = true
+                },
+                {
+                    k("UICorner",{CornerRadius = UDim.new(0, 4)}),
+                    k(
+                        "ImageLabel",
+                        {
+                            BackgroundTransparency = 1,
+                            Size = UDim2.fromOffset(0, 0),
+                            Position = UDim2.new(0.5, 0, 0.5, 0),
+                            AnchorPoint = Vector2.new(0.5, 0.5),
+                            Image = "http://www.roblox.com/asset/?id=18855086552",
+                            ImageColor3 = Color3.fromRGB(0, 0, 0)
+                        }
+                    )
+                }
+            )
             function q.SetTitle(r, s)
                 q.TitleLabel.Text = s
             end
@@ -850,6 +889,36 @@ local aa = {
                     q.DescLabel.Visible = true
                 end
                 q.DescLabel.Text = s
+                if q.IsLocked then ts:Create(q.Locked.ImageLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1), {Size = UDim2.fromOffset(q.DescLabel.TextBounds.Y + 15, q.DescLabel.TextBounds.Y + 15)}):Play() end
+            end
+            function q.Lock(r)
+                q.Locked.ImageLabel.Size = UDim2.fromOffset(0, 0)
+                ts:Create(
+                    q.Locked,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {BackgroundTransparency = 0.5}
+                ):Play()
+                ts:Create(
+                    q.Locked.ImageLabel,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {Size = UDim2.fromOffset(q.DescLabel.TextBounds.Y + 15, q.DescLabel.TextBounds.Y + 15)}
+                ):Play()
+                q.IsLocked = true
+                q.LockButton.Visible = true
+            end
+            function q.UnLock(r)
+                ts:Create(
+                    q.Locked,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {BackgroundTransparency = 1}
+                ):Play()
+                ts:Create(
+                    q.Locked.ImageLabel,
+                    TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
+                    {Size = UDim2.fromOffset(0, 0)}
+                ):Play()
+                q.IsLocked = false
+                q.LockButton.Visible = false
             end
             function q.Destroy(r)
                 q.Frame:Destroy()
@@ -928,8 +997,9 @@ local aa = {
             q.Title = q.Title or ""
             q.Content = q.Content or ""
             q.SubContent = q.SubContent or ""
-            q.Show = q.Show
-            q.LabelPos = q.LabelPos or 35
+            q.Disable = q.Disable or false
+            q.LabelY = q.LabelY or nil
+            q.HolderY = q.HolderY or nil
             q.Duration = q.Duration or nil
             q.Buttons = q.Buttons or {}
             local r = {Closed = false, Size = UDim2.new(1, 0, 1, 0)}
@@ -994,7 +1064,7 @@ local aa = {
                     AutomaticSize = Enum.AutomaticSize.Y,
                     BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                     BackgroundTransparency = 1,
-                    Position = UDim2.fromOffset(14, q.LabelPos),
+                    Position = UDim2.fromOffset(14, q.LabelY or 40),
                     Size = UDim2.new(1, -28, 0, 0)
                 },
                 {
@@ -1015,7 +1085,7 @@ local aa = {
                 "TextButton",
                 {
                     Text = "",
-                    Visible = q.Show,
+                    Visible = not q.Disable,
                     Position = UDim2.new(1, -14, 0, 13),
                     Size = UDim2.fromOffset(20, 20),
                     AnchorPoint = Vector2.new(1, 0),
@@ -1066,7 +1136,7 @@ local aa = {
             )
             function r.Open(t)
                 local u = r.LabelHolder.AbsoluteSize.Y
-                r.Holder.Size = UDim2.new(1, 0, 0, 58 + u)
+                r.Holder.Size = UDim2.new(1, 0, 0, q.HolderY or 58 + u)
                 s:setGoal {Scale = l(0, {frequency = 5}), Offset = l(0, {frequency = 5})}
             end
             function r.Close(t)
@@ -1084,12 +1154,25 @@ local aa = {
                     )
                 end
             end
+            function r.Callback(t, z, ...)
+                if not z then
+                    return
+                end
+                local A, B = pcall(z, ...)
+                r:Close()
+            end
             r:Open()
-            if q.Duration then
+            if q.Duration and type(q.Duration) == "number" then
                 task.delay(
                     q.Duration,
                     function()
                         r:Close()
+                    end
+                )
+            elseif q.Duration and type(q.Duration) == "function" then
+                task.spawn(
+                    function()
+                        r:Callback(q.Duration)
                     end
                 )
             end
@@ -1992,23 +2075,19 @@ local aa = {
                     C = true
                     local N = u.MinimizeKeybind and u.MinimizeKeybind.Value or u.MinimizeKey.Name
                     if TT then
-                        local Tick, Target = tick() - Time, nil
+                        local Tick = tick() - Time
                         local Secs = math.floor(Tick) % ((9e9 * 9e9) + (9e9 * 9e9))
                         local Mils = string.format(".%.03d", (Tick % 1) * 1000)
-                        local BA = u:Notify {
+                        u:Notify {
                             Title = "Successful Loaded",
                             SubContent = "Loaded Ui In "..tostring(Secs..Mils).."s Press "..N.." For Show, Hide Ui",
-                            Show = false,
-                            LabelPos = 35,
-                            Duration = (9e9 * 9e9) + (9e9 * 9e9)
+                            Disable = true,
+                            LabelY = 35,
+                            HolderY = 75,
+                            Duration = function()
+                                repeat wait() until v.Root.Visible
+                            end
                         }
-                        BA.Holder.Size = UDim2.new(1,0,0,75)
-                        Target = v.Root:GetPropertyChangedSignal("Visible"):Connect(function()
-                            if not Target then return false, "Unable To Target" end
-                            BA:Close()
-                            Target:Disconnect()
-                            Target = nil
-                        end)
                     end
                 end
             end
@@ -2290,6 +2369,7 @@ local aa = {
             assert(x.Default, "AddColorPicker: Missing default value.")
             local z = {
                 Value = x.Default,
+                Default = x.Default,
                 Transparency = x.Transparency or 0,
                 Type = "Colorpicker",
                 Title = type(x.Title) == "string" and x.Title or "Colorpicker",
@@ -2306,6 +2386,8 @@ local aa = {
             local A = e(t.Element)(x.Title, x.Description, v.Container, true)
             z.SetTitle = A.SetTitle
             z.SetDesc = A.SetDesc
+            z.Lock = A.Lock
+            z.UnLock = A.UnLock
             local B =
                 s(
                 "Frame",
@@ -2723,6 +2805,9 @@ local aa = {
                 u.Library:SafeCallback(z.Changed, z.Value)
             end
             function z.SetValue(ac, ad, ae)
+                if not y.Reseting and A.IsLocked then
+                    return
+                end
                 local af = Color3.fromHSV(ad[1], ad[2], ad[3])
                 z.Transparency = ae or 0
                 z:SetHSVFromRGB(af)
@@ -2771,8 +2856,10 @@ local aa = {
                 {
                     Values = j.Values,
                     Value = j.Default,
+                    Default = j.Default,
                     Multi = j.Multi,
-                    Lock = j.Lock,
+                    Search = j.Search,
+                    Tables = {},
                     Buttons = {},
                     Opened = false,
                     Type = "Dropdown",
@@ -2783,6 +2870,8 @@ local aa = {
             m.DescLabel.Size = UDim2.new(1, -170, 0, 14)
             l.SetTitle = m.SetTitle
             l.SetDesc = m.SetDesc
+            l.Lock = m.Lock
+            l.UnLock = m.UnLock
             local n, o =
                 e(
                     "TextLabel",
@@ -2929,22 +3018,54 @@ local aa = {
                     end
                 end
             )
+            local se = ac(f.Textbox)()
+            se.Frame.Parent = t
+            se.Frame.Size = UDim2.new(1, -5, 0, 32)
+            se.Input.TextXAlignment = Enum.TextXAlignment.Center
+            se.Input.PlaceholderText = "Search."
+            se.Frame.Visible = l.Search or false
+            c.AddSignal(se.Input:GetPropertyChangedSignal "Text",
+                function()
+                    if not l.Opened then
+                        return
+                    end
+                    l:UpdateSearch()
+                end
+            )
             local A = h.ScrollFrame
+            function l.UpdateSearch(B)
+                for _, ButtonX in next, t:GetChildren() do
+                    if ButtonX:IsA "TextButton" then
+                        local searchtext = string.lower(se.Input.Text)
+                        if searchtext == "" then
+                            ButtonX.Visible = true
+                        else
+                            local buttontext = string.lower(ButtonX.ButtonLabel.Text)
+                            if string.find(buttontext, searchtext) then
+                                ButtonX.Visible = true
+                            else
+                                ButtonX.Visible = false
+                            end
+                        end
+                    end
+                end
+            end
             function l.Open(B)
                 l.Opened = true
                 A.ScrollingEnabled = false
+                u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
-                af:Create(
-                    u,
-                    TweenInfo.new(0.2, Enum.EasingStyle.Quart, Enum.EasingDirection.Out),
-                    {Size = UDim2.fromScale(1, 1)}
-                ):Play()
+                se.Input.Text = ""
+                if t:FindFirstChild("TextButton") == nil then
+                    l:BuildDropdownList()
+                end
             end
             function l.Close(B)
                 l.Opened = false
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
+                se.Input.Text = ""
             end
             function l.Display(B)
                 local C, D = l.Values, ""
@@ -2972,12 +3093,12 @@ local aa = {
                 end
             end
             function l.BuildDropdownList(B)
-                local C, D = l.Values, {}
                 for E, F in next, t:GetChildren() do
-                    if not F:IsA "UIListLayout" then
+                    if F:IsA "TextButton" then
                         F:Destroy()
                     end
                 end
+                local C, D = l.Values, {}
                 local G = 0
                 for H, I in next, C do
                     local J = {}
@@ -3037,30 +3158,6 @@ local aa = {
                             K.Size = UDim2.new(0, 4, 0, T)
                         end
                     )
-                    c.AddSignal(
-                        M.MouseEnter,
-                        function()
-                            P(N and 0.85 or 0.89)
-                        end
-                    )
-                    c.AddSignal(
-                        M.MouseLeave,
-                        function()
-                            P(N and 0.89 or 1)
-                        end
-                    )
-                    c.AddSignal(
-                        M.MouseButton1Down,
-                        function()
-                            P(0.92)
-                        end
-                    )
-                    c.AddSignal(
-                        M.MouseButton1Up,
-                        function()
-                            P(N and 0.85 or 0.89)
-                        end
-                    )
                     function J.UpdateButton(T)
                         if j.Multi then
                             N = l.Value[I]
@@ -3071,7 +3168,7 @@ local aa = {
                             N = l.Value == I
                             P(N and 0.89 or 1)
                         end
-                        S:setGoal(d.Spring.new(N and 14 or 6, {frequency = 6}))
+                        S:setGoal(d.Spring.new(N and 14 or 0, {frequency = 6}))
                         R(N and 0 or 1)
                     end
                     L.InputBegan:Connect(
@@ -3081,11 +3178,16 @@ local aa = {
                                     T.UserInputType == Enum.UserInputType.Touch
                              then
                                 local U = not N
-                                if j.Lock and l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                if j.UnSelect and l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                elseif not k.Reseting and m.IsLocked then l:Close()
                                 else
                                     if j.Multi then
                                         N = U
                                         l.Value[I] = N and true or nil
+                                        l.Tables = {}
+                                        for DC, TB in next, l.Value do
+                                            table.insert(l.Tables, TB == true and DC)
+                                        end
                                     else
                                         N = U
                                         l.Value = N and I or nil
@@ -3120,14 +3222,17 @@ local aa = {
             function l.SetValues(B, C)
                 if C then
                     l.Values = C
+                    l:BuildDropdownList()
                 end
-                l:BuildDropdownList()
             end
             function l.OnChanged(B, C)
                 l.Changed = C
                 C(l.Value)
             end
             function l.SetValue(B, C)
+                if not k.Reseting and m.IsLocked then
+                    return
+                end
                 if l.Multi then
                     local D = {}
                     for E, F in next, C do
@@ -3136,14 +3241,20 @@ local aa = {
                         end
                     end
                     l.Value = D
+                    l.Tables = {}
+                    for DC, TB in next, l.Value do
+                        table.insert(l.Tables, TB == true and DC)
+                    end
                 else
                     if not C then
                         l.Value = nil
                     elseif table.find(l.Values, C) then
                         l.Value = C
+                    elseif type(C) == "number" and l.Values[C] and table.find(l.Values, l.Values[C]) then
+                        l.Value = l.Values[C]
                     end
                 end
-                l:BuildDropdownList()
+                l:Display()
                 k:SafeCallback(l.Callback, l.Value)
                 k:SafeCallback(l.Changed, l.Value)
             end
@@ -3151,9 +3262,8 @@ local aa = {
                 m:Destroy()
                 k.Options[i] = nil
             end
-            l:BuildDropdownList()
             l:Display()
-            local B = {}
+            local B, TOSX = {}, {}
             if type(j.Default) == "string" then
                 local C = table.find(l.Values, j.Default)
                 if C then
@@ -3164,6 +3274,7 @@ local aa = {
                     local E = table.find(l.Values, D)
                     if E then
                         table.insert(B, E)
+                        table.insert(l.Tables, D)
                     end
                 end
             elseif type(j.Default) == "number" and l.Values[j.Default] ~= nil then
@@ -3173,7 +3284,7 @@ local aa = {
                 for C = 1, #B do
                     local D = B[C]
                     if j.Multi then
-                        l.Value[l.Values[D]] = true
+                        TOSX[l.Values[D]] = true
                     else
                         l.Value = l.Values[D]
                     end
@@ -3182,11 +3293,8 @@ local aa = {
                     end
                 end
                 if j.Multi then
-                    for C, E in next, B do
-                        print(C, E)
-                    end
+                    l:SetValue(TOSX)
                 end
-                l:BuildDropdownList()
                 l:Display()
             end
             k.Options[i] = l
@@ -3209,6 +3317,7 @@ local aa = {
             local h, i =
                 {
                     Value = f.Default or "",
+                    Default = f.Default or "",
                     Numeric = f.Numeric or false,
                     Finished = f.Finished or false,
                     Callback = f.Callback or function(h)
@@ -3218,6 +3327,8 @@ local aa = {
                 ac(aj.Element)(f.Title, f.Description, d.Container, false)
             h.SetTitle = i.SetTitle
             h.SetDesc = i.SetDesc
+            h.Lock = i.Lock
+            h.UnLock = i.UnLock
             local j = ac(aj.Textbox)(i.Frame, true)
             j.Frame.Position = UDim2.new(1, -10, 0.5, 0)
             j.Frame.AnchorPoint = Vector2.new(1, 0.5)
@@ -3226,6 +3337,11 @@ local aa = {
             j.Input.PlaceholderText = f.Placeholder or ""
             local k = j.Input
             function h.SetValue(l, m)
+                if not g.Reseting and i.IsLocked then
+                    h.Value = h.Value
+                    k.Text = h.Value
+                    return
+                end
                 if f.MaxLength and #m > f.MaxLength then
                     m = m:sub(1, f.MaxLength)
                 end
@@ -3284,6 +3400,7 @@ local aa = {
             local h, i, j =
                 {
                     Value = f.Default,
+                    Default = f.Default,
                     Toggled = false,
                     Mode = f.Mode or "Toggle",
                     Type = "Keybind",
@@ -3296,6 +3413,8 @@ local aa = {
                 ac(aj.Element)(f.Title, f.Description, d.Container, true)
             h.SetTitle = j.SetTitle
             h.SetDesc = j.SetDesc
+            h.Lock = j.Lock
+            h.UnLock = j.UnLock
             local k =
                 ai(
                 "TextLabel",
@@ -3366,6 +3485,9 @@ local aa = {
                 end
             end
             function h.SetValue(m, n, o)
+                if not g.Reseting and j.IsLocked then
+                    return
+                end
                 n = n or h.Key
                 o = o or h.Mode
                 k.Text = n
@@ -3380,6 +3502,9 @@ local aa = {
                 n(h.Value)
             end
             function h.DoClick(m)
+                if not g.Reseting and j.IsLocked then
+                    return
+                end
                 g:SafeCallback(h.Callback, h.Toggled)
                 g:SafeCallback(h.Clicked, h.Toggled)
             end
@@ -3391,7 +3516,11 @@ local aa = {
                 l.InputBegan,
                 function(m)
                     if m.UserInputType == Enum.UserInputType.MouseButton1 or m.UserInputType == Enum.UserInputType.Touch then
+                        if not g.Reseting and j.IsLocked then
+                            return
+                        end
                         i = true
+                        local Old = {t = k.Text, v = h.Value}
                         k.Text = "..."
                         wait(0.2)
                         local n
@@ -3410,6 +3539,14 @@ local aa = {
                                 s =
                                     af.InputEnded:Connect(
                                     function(t)
+                                        if not g.Reseting and j.IsLocked then
+                                            i = false
+                                            k.Text = Old.t
+                                            h.Value = Old.v
+                                            n:Disconnect()
+                                            s:Disconnect()
+                                            return
+                                        end
                                         if
                                             t.KeyCode.Name == p or
                                                 p == "MouseLeft" and t.UserInputType == Enum.UserInputType.MouseButton1 or
@@ -3433,7 +3570,8 @@ local aa = {
             ah.AddSignal(
                 af.InputBegan,
                 function(m)
-                    if not i and not af:GetFocusedTextBox() then
+                    if not g.Reseting and j.IsLocked then
+                    elseif not i and not af:GetFocusedTextBox() then
                         if h.Mode == "Toggle" then
                             local n = h.Value
                             if n == "MouseLeft" or n == "MouseRight" then
@@ -3490,13 +3628,15 @@ local aa = {
             assert(f.Max, "Slider - Missing maximum value.")
             assert(f.Rounding, "Slider - Missing rounding value.")
             local h, i, j =
-                {Value = nil, Min = f.Min, Max = f.Max, Rounding = f.Rounding, Callback = f.Callback or function(h)
+                {Value = nil, Default = f.Default, Min = f.Min, Max = f.Max, Rounding = f.Rounding, Callback = f.Callback or function(h)
                         end, Type = "Slider"},
                 false,
                 ac(aj.Element)(f.Title, f.Description, d.Container, false)
             j.DescLabel.Size = UDim2.new(1, -170, 0, 14)
             h.SetTitle = j.SetTitle
             h.SetDesc = j.SetDesc
+            h.Lock = j.Lock
+            h.UnLock = j.UnLock
             local k =
                 ai(
                 "ImageLabel",
@@ -3558,6 +3698,10 @@ local aa = {
                 k.InputBegan,
                 function(p)
                     if p.UserInputType == Enum.UserInputType.MouseButton1 or p.UserInputType == Enum.UserInputType.Touch then
+                        if not g.Reseting and j.IsLocked then
+                            i = false
+                            return
+                        end
                         i = true
                     end
                 end
@@ -3566,6 +3710,10 @@ local aa = {
                 k.InputEnded,
                 function(p)
                     if p.UserInputType == Enum.UserInputType.MouseButton1 or p.UserInputType == Enum.UserInputType.Touch then
+                        if not g.Reseting and j.IsLocked then
+                            i = false
+                            return
+                        end
                         i = false
                     end
                 end
@@ -3588,6 +3736,9 @@ local aa = {
                 s(h.Value)
             end
             function h.SetValue(p, s)
+                if not g.Reseting and j.IsLocked then
+                    return
+                end
                 p.Value = g:Round(math.clamp(s, h.Min, h.Max), h.Rounding)
                 k.Position = UDim2.new((p.Value - h.Min) / (h.Max - h.Min), -7, 0.5, 0)
                 m.Size = UDim2.fromScale((p.Value - h.Min) / (h.Max - h.Min), 1)
@@ -3615,11 +3766,13 @@ local aa = {
         function c.New(d, e, f)
             local g = d.Library
             assert(f.Title, "Toggle - Missing Title")
-            local h, i = {Value = f.Default or false, Callback = f.Callback or function(h)
+            local h, i = {Value = f.Default or false, Default = f.Default or false, Callback = f.Callback or function(h)
                         end, Type = "Toggle"}, ac(aj.Element)(f.Title, f.Description, d.Container, true)
             i.DescLabel.Size = UDim2.new(1, -54, 0, 14)
             h.SetTitle = i.SetTitle
             h.SetDesc = i.SetDesc
+            h.Lock = i.Lock
+            h.UnLock = i.UnLock
             local j, k =
                 ai(
                     "ImageLabel",
@@ -3651,6 +3804,9 @@ local aa = {
                 n(h.Value)
             end
             function h.SetValue(m, n)
+                if not g.Reseting and i.IsLocked then
+                    return
+                end
                 n = not (not n)
                 h.Value = n
                 ah.OverrideTag(k, {Color = h.Value and "Accent" or "ToggleSlider"})
