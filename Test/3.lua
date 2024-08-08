@@ -1499,6 +1499,7 @@ local aa = {
             k.AddSignal(
                 o.Input.Focused,
                 function()
+                    o.Input:ReleaseFocus()
                     p()
                     o.Indicator.Size = UDim2.new(1, -2, 0, 2)
                     o.Indicator.Position = UDim2.new(0, 1, 1, 0)
@@ -3133,7 +3134,7 @@ local aa = {
                                     T.UserInputType == Enum.UserInputType.Touch
                              then
                                 local U = not N
-                                if j.Lock and l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                if j.UnSelect and l:GetActiveValues() == 1 and not U and not j.AllowNull then
                                 elseif m.IsLocked then l:Close()
                                 else
                                     if j.Multi then
@@ -3296,7 +3297,7 @@ local aa = {
                         m = h.Value
                     end
                 end
-                if i.IsLocked then
+                if i.IsLocked and not g.Reseting then
                     h.Value = h.Value
                     k.Text = h.Value
                     return
@@ -3450,6 +3451,7 @@ local aa = {
                 n(h.Value)
             end
             function h.DoClick(m)
+                if j.IsLocked then return end
                 g:SafeCallback(h.Callback, h.Toggled)
                 g:SafeCallback(h.Clicked, h.Toggled)
             end
@@ -3577,6 +3579,8 @@ local aa = {
             j.DescLabel.Size = UDim2.new(1, -170, 0, 14)
             h.SetTitle = j.SetTitle
             h.SetDesc = j.SetDesc
+            h.Lock = j.Lock
+            h.UnLock = j.UnLock
             local k =
                 ai(
                 "ImageLabel",
@@ -3638,6 +3642,10 @@ local aa = {
                 k.InputBegan,
                 function(p)
                     if p.UserInputType == Enum.UserInputType.MouseButton1 or p.UserInputType == Enum.UserInputType.Touch then
+                        if j.IsLocked then
+                            i = false
+                            return
+                        end
                         i = true
                     end
                 end
@@ -3646,6 +3654,10 @@ local aa = {
                 k.InputEnded,
                 function(p)
                     if p.UserInputType == Enum.UserInputType.MouseButton1 or p.UserInputType == Enum.UserInputType.Touch then
+                        if j.IsLocked then
+                            i = false
+                            return
+                        end
                         i = false
                     end
                 end
@@ -3654,7 +3666,7 @@ local aa = {
                 af.InputChanged,
                 function(p)
                     if
-                        i and
+                        i and not j.IsLocked and
                             (p.UserInputType == Enum.UserInputType.MouseMovement or
                                 p.UserInputType == Enum.UserInputType.Touch)
                      then
@@ -3700,6 +3712,8 @@ local aa = {
             i.DescLabel.Size = UDim2.new(1, -54, 0, 14)
             h.SetTitle = i.SetTitle
             h.SetDesc = i.SetDesc
+            h.Lock = i.Lock
+            h.UnLock = i.UnLock
             local j, k =
                 ai(
                     "ImageLabel",
@@ -3756,6 +3770,7 @@ local aa = {
             ah.AddSignal(
                 i.Frame.MouseButton1Click,
                 function()
+                    if i.IsLocked then return end
                     h:SetValue(not h.Value)
                 end
             )
