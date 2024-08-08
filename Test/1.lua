@@ -868,11 +868,9 @@ local aa = {
                         {
                             BackgroundTransparency = 1,
                             Size = UDim2.fromOffset(0, 0),
-                            Position = UDim2.new(0.475, 0, 0.5, 0),
+                            Position = UDim2.new(0.5, 0, 0.5, 0),
                             AnchorPoint = Vector2.new(0.5, 0.5),
                             Image = "http://www.roblox.com/asset/?id=18855086552",
-                            ImageRectOffset = Vector2.new(404, 364),
-                            ImageRectSize = Vector2.new(36, 36),
                             ImageColor3 = Color3.fromRGB(0, 0, 0)
                         }
                     )
@@ -3066,6 +3064,24 @@ local aa = {
             function l.BuildDropdownList(B)
                 local C, D = l.Values, {}
                 local G = 0
+                local SeArcH =
+                    e(
+                        "TextBox",
+                        {
+                            FontFace = Font.new "rbxasset://fonts/families/GothamSSm.json",
+                            TextColor3 = Color3.fromRGB(200, 200, 200),
+                            TextSize = 14,
+                            TextXAlignment = Enum.TextXAlignment.Left,
+                            TextYAlignment = Enum.TextYAlignment.Center,
+                            BackgroundColor3 = Color3.fromRGB(255, 255, 255),
+                            AutomaticSize = Enum.AutomaticSize.Y,
+                            BackgroundTransparency = 1,
+                            Size = UDim2.new(1, -5, 0, 32),
+                            Parent = t,
+                            ThemeTag = {TextColor3 = "Text", PlaceholderColor3 = "SubText"}
+                        },
+                        {e("UICorner", {CornerRadius = UDim.new(0, 6)})}
+                    )
                 for H, I in next, C do
                     local J = {}
                     G = G + 1
