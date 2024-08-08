@@ -868,12 +868,10 @@ local aa = {
                         {
                             BackgroundTransparency = 1,
                             Size = UDim2.fromOffset(0, 0),
-                            Position = UDim2.new(0.475, 0, 0.5, 0),
+                            Position = UDim2.new(0.5, 0, 0.5, 0),
                             AnchorPoint = Vector2.new(0.5, 0.5),
-                            Image = "http://www.roblox.com/asset/?id=3926305904",
-                            ImageRectOffset = Vector2.new(404, 364),
-                            ImageRectSize = Vector2.new(36, 36),
-                            ImageColor3 = Color3.fromRGB(255, 25, 25)
+                            Image = "http://www.roblox.com/asset/?id=18855086552",
+                            ImageColor3 = Color3.fromRGB(0, 0, 0)
                         }
                     )
                 }
@@ -891,7 +889,7 @@ local aa = {
                     q.DescLabel.Visible = true
                 end
                 q.DescLabel.Text = s
-                if q.IsLocked then ts:Create(q.Locked.ImageLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1), {Size = UDim2.fromOffset(q.DescLabel.TextBounds.Y + 22.5, q.DescLabel.TextBounds.Y + 22.5)}):Play() end
+                if q.IsLocked then ts:Create(q.Locked.ImageLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1), {Size = UDim2.fromOffset(q.DescLabel.TextBounds.Y + 15, q.DescLabel.TextBounds.Y + 15)}):Play() end
             end
             function q.Lock(r)
                 q.Locked.ImageLabel.Size = UDim2.fromOffset(0, 0)
@@ -903,7 +901,7 @@ local aa = {
                 ts:Create(
                     q.Locked.ImageLabel,
                     TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0.1),
-                    {Size = UDim2.fromOffset(q.DescLabel.TextBounds.Y + 22.5, q.DescLabel.TextBounds.Y + 22.5)}
+                    {Size = UDim2.fromOffset(q.DescLabel.TextBounds.Y + 15, q.DescLabel.TextBounds.Y + 15)}
                 ):Play()
                 q.IsLocked = true
                 q.LockButton.Visible = true
