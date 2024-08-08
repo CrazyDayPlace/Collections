@@ -3037,6 +3037,28 @@ local aa = {
                     e("UICorner", {CornerRadius = UDim.new(0, 6)})
                 }
             )
+            c.AddSignal(
+                SeArcH.Focused,
+                function()
+                    if not l.Opened then
+                        SeArcH.BackgroundTransparency = 0.89
+                        return
+                    end
+                    l:Search()
+                    SeArcH.BackgroundTransparency = 0.5
+                end
+            )
+            c.AddSignal(
+                SeArcH.FocusLost,
+                function()
+                    if not l.Opened then
+                        SeArcH.BackgroundTransparency = 0.89
+                        return
+                    end
+                    l:Search()
+                    SeArcH.BackgroundTransparency = 0.89
+                end
+            )
             local A = h.ScrollFrame
             function l.Open(B)
                 l:BuildDropdownList()
