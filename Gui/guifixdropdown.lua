@@ -2858,6 +2858,7 @@ local aa = {
                     Value = j.Default,
                     Default = j.Default,
                     Multi = j.Multi,
+                    Search = j.Search,
                     Tables = {},
                     Buttons = {},
                     Opened = false,
@@ -3022,6 +3023,7 @@ local aa = {
             se.Frame.Size = UDim2.new(1, -5, 0, 32)
             se.Input.TextXAlignment = Enum.TextXAlignment.Center
             se.Input.PlaceholderText = "Search."
+            se.Frame.Visible = l.Search or false
             c.AddSignal(se.Input:GetPropertyChangedSignal "Text",
                 function()
                     if not l.Opened then
