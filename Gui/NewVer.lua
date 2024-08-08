@@ -3051,19 +3051,16 @@ local aa = {
                 end
             end
             function l.Open(B)
-                l:BuildDropdownList()
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
                 se.Input.Text = ""
+                if t:FindFirstChild("TextButton") == nil then
+                    l:BuildDropdownList()
+                end
             end
             function l.Close(B)
-                for E, F in next, t:GetChildren() do
-                    if F:IsA "TextButton" then
-                        F:Destroy()
-                    end
-                end
                 l.Opened = false
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
@@ -3096,6 +3093,11 @@ local aa = {
                 end
             end
             function l.BuildDropdownList(B)
+                for E, F in next, t:GetChildren() do
+                    if F:IsA "TextButton" then
+                        F:Destroy()
+                    end
+                end
                 local C, D = l.Values, {}
                 local G = 0
                 for H, I in next, C do
@@ -3220,6 +3222,11 @@ local aa = {
             function l.SetValues(B, C)
                 if C then
                     l.Values = C
+                    for E, F in next, t:GetChildren() do
+                        if F:IsA "TextButton" then
+                            F:Destroy()
+                        end
+                    end
                 end
             end
             function l.OnChanged(B, C)
