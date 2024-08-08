@@ -3061,6 +3061,12 @@ local aa = {
                 if j.Search then se.Input.Text = "" end
                 if t:FindFirstChild("TextButton") == nil then
                     l:BuildDropdownList()
+                else
+                    for E, F in next, t:GetChildren() do
+                        if F:IsA "TextButton" then
+                            F.Visible = true
+                        end
+                    end
                 end
             end
             function l.Close(B)
