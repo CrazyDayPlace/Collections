@@ -93,6 +93,21 @@ local Files = {} do
                     end
                 end
             end
+            if name and name:find(".lua") then
+                local Grabs = {}
+                for i = 1, name:len() do
+                    if i == name:len() - 4 then
+                        table.insert(Grabs, name:sub(i + 1, name:len()))
+                    end
+                end
+                if Grabs[#Grabs] == ".lua" then
+                    for i = 1, name:len() do
+                        if i == name:len() -4 then
+                            name = name:sub(1, i)
+                        end
+                    end
+                end
+            end
             if name then
                 local line = path:gsub("/", "")
                 name = name:gsub(line, "")
