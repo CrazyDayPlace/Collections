@@ -42,7 +42,7 @@ Tabs[1]:AddDropdown(
     {
         Title = "Dropdown",
         Search = true, -- make your dropdown can search for the values
-        UnSelect = true, -- make you can unselect the value
+        AllowNull = true, -- make you can unselect the value
         Multi = false,
         Values = {"Option1", "Option2", "Option3"},
         Default = "Option1" or 1,
@@ -94,6 +94,26 @@ Tabs[1]:AddButton(
     }
 )
 
+local disablenotify = false
+LoadedGui:Notify(
+    {
+        Title = "Notify 1",
+        Disable = true, -- disable close button
+        LabelY = 40, -- set the labelholder y position
+        HolderY = 155, -- set the holderframe size
+        Duration = 1
+    }
+)
+
+LoadedGui:Notify(
+    {
+        Title = "Notify 2",
+        Duration = function()
+            repeat wait() until disablenotify == true
+        end
+    }
+)
+
 
 do
     Interfaces:SetLibrary(LoadedGui)
@@ -108,4 +128,8 @@ do
 
     MyWindow:SelectTab(1)
     MyWindow:Minimize("Loaded") -- Hide Gui With The Notify
+
+    task.delay(10, function()
+        disablenotify = true
+    end)
 end
