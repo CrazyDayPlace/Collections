@@ -79,33 +79,15 @@ local Files = {} do
                 name = name:gsub([[\]], "")
             end
             if name and name:find(".json") then
-                local Grabs = {}
-                for i = 1, name:len() do
-                    if i == name:len() - 5 then
-                        table.insert(Grabs, name:sub(i + 1, name:len()))
-                    end
-                end
-                if Grabs[#Grabs] == ".json" then
-                    for i = 1, name:len() do
-                        if i == name:len() -5 then
-                            name = name:sub(1, i)
-                        end
-                    end
+                local len = name:len()
+                if name:sub(len - 4, len) == ".json" then
+                    name = name:sub(1, len - 5)
                 end
             end
             if name and name:find(".lua") then
-                local Grabs = {}
-                for i = 1, name:len() do
-                    if i == name:len() - 4 then
-                        table.insert(Grabs, name:sub(i + 1, name:len()))
-                    end
-                end
-                if Grabs[#Grabs] == ".lua" then
-                    for i = 1, name:len() do
-                        if i == name:len() -4 then
-                            name = name:sub(1, i)
-                        end
-                    end
+                local len = name:len()
+                if name:sub(len - 3, len) == ".lua" then
+                    name = name:sub(1, len - 4)
                 end
             end
             if name then
