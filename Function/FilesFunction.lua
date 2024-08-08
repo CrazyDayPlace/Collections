@@ -79,9 +79,17 @@ local Files = {} do
                 name = name:gsub([[\]], "")
             end
             if name and name:find(".json") then
+                local Grabs = {}
                 for i = 1, name:len() do
-                    if i == name:len() -5 then
-                        name = name:sub(1, i)
+                    if i == name:len() - 5 then
+                        table.insert(Grabs, name:sub(i + 1, name:len()))
+                    end
+                end
+                if Grabs[#Grabs] == ".json" then
+                    for i = 1, name:len() do
+                        if i == name:len() -5 then
+                            name = name:sub(1, i)
+                        end
                     end
                 end
             end
