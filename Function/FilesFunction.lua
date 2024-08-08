@@ -65,7 +65,7 @@ local Files = {} do
             end
         end
     end
-    function Files:ListFile(path)
+    function Files:ListFile(path, type)
         if not path then return false, "Unable To ListFile, Invail Path"
         elseif not listfiles or not isfolder then return false, "Unable To ListFile, The Excutor Has Invaild ListFile Functions"
         elseif path and not isfolder(path) then return false, "Unable To ListFile, Invail Folder To List" end
@@ -78,13 +78,13 @@ local Files = {} do
             if name and name:find([[\]]) then
                 name = name:gsub([[\]], "")
             end
-            if name and name:find(".json") then
+            if type and type == "json" and name and name:find(".json") then
                 local len = name:len()
                 if name:sub(len - 4, len) == ".json" then
                     name = name:sub(1, len - 5)
                 end
             end
-            if name and name:find(".lua") then
+            if type and type == "lua" and name and name:find(".lua") then
                 local len = name:len()
                 if name:sub(len - 3, len) == ".lua" then
                     name = name:sub(1, len - 4)
