@@ -838,6 +838,18 @@ local aa = {
                 },
                 {k("UICorner", {CornerRadius = UDim.new(0, 4)}), q.Border, q.LabelHolder}
             )
+            q.LockButton =
+            k(
+                "TextButton",
+                {
+                    BackgroundColor3 = Color3.fromRGB(0, 0, 0),
+                    BackgroundTransparency = 1,
+                    ZIndex = 250,
+                    Size = UDim2.fromScale(1, 1),
+                    Parent = q.Frame,
+                    Visible = false
+                }
+            )
             q.Locked =
             k(
                 "Frame",
@@ -894,6 +906,7 @@ local aa = {
                     {Size = UDim2.fromOffset(q.DescLabel.TextBounds.Y + 30, q.DescLabel.TextBounds.Y + 30)}
                 ):Play()
                 q.IsLocked = true
+                q.LockButton.Visible = q.IsLocked
             end
             function q.UnLock(r)
                 ts:Create(
@@ -907,6 +920,7 @@ local aa = {
                     {Size = UDim2.fromOffset(0, 0)}
                 ):Play()
                 q.IsLocked = false
+                q.LockButton.Visible = q.IsLocked
             end
             function q.Destroy(r)
                 q.Frame:Destroy()
@@ -1437,7 +1451,8 @@ local aa = {
                     BackgroundTransparency = 1,
                     ClipsDescendants = true,
                     Position = UDim2.new(0, 6, 0, 0),
-                    Size = UDim2.new(1, -12, 1, 0)
+                    Size = UDim2.new(1, -12, 1, 0),
+                    Visible = false
                 },
                 {o.Input}
             )
