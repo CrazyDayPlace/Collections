@@ -3017,48 +3017,12 @@ local aa = {
                     end
                 end
             )
-            local se
-            if j.Search then
-                se = ac(f.Textbox)()
-                se.Frame.Parent = t
-                se.Frame.Size = UDim2.new(1, -5, 0, 20)
-                se.Input.TextXAlignment = Enum.TextXAlignment.Center
-                se.Input.PlaceholderText = "Search."
-                se.Input.TextSize = 13
-                c.AddSignal(se.Input:GetPropertyChangedSignal "Text",
-                    function()
-                        if not l.Opened then
-                            return
-                        end
-                        l:UpdateSearch()
-                    end
-                )
-
-                function l.UpdateSearch(B)
-                    for _, ButtonX in next, t:GetChildren() do
-                        if ButtonX:IsA "TextButton" then
-                            local searchtext = string.lower(se.Input.Text)
-                            if searchtext == "" then
-                                ButtonX.Visible = true
-                            else
-                                local buttontext = string.lower(ButtonX.ButtonLabel.Text)
-                                if string.find(buttontext, searchtext) then
-                                    ButtonX.Visible = true
-                                else
-                                    ButtonX.Visible = false
-                                end
-                            end
-                        end
-                    end
-                end
-            end
             local A = h.ScrollFrame
             function l.Open(B)
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
-                if j.Search then se.Input.Text = "" end
                 if t:FindFirstChild("TextButton") == nil then
                     l:BuildDropdownList()
                 else
@@ -3074,7 +3038,6 @@ local aa = {
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
-                if j.Search then se.Input.Text = "" end
             end
             function l.Display(B)
                 local C, D = l.Values, ""
