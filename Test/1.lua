@@ -2986,7 +2986,7 @@ local aa = {
                     if ai.ViewportSize.Y - p.AbsolutePosition.Y < v.AbsoluteSize.Y - 5 then
                         w = v.AbsoluteSize.Y - 5 - (ai.ViewportSize.Y - p.AbsolutePosition.Y) + 40
                     end
-                    v.Position = UDim2.fromOffset(p.AbsolutePosition.X - 1, p.AbsolutePosition.Y - 5 - w)
+                    v.Position = UDim2.fromOffset(p.AbsolutePosition.X - 1, (p.AbsolutePosition.Y - 5 - w) + 35)
                 end, 0
             local y, z = function()
                     if #l.Values > 10 then
