@@ -3024,8 +3024,9 @@ local aa = {
             )
             if j.Search then
                 se = ac(f.Textbox)()
-                se.Frame.Parent = t
+                se.Frame.Parent = p
                 se.Frame.Size = UDim2.fromOffset(160, 30)
+                se.Frame.Visible = false
                 se.Input.TextXAlignment = Enum.TextXAlignment.Center
                 se.Input.PlaceholderText = "Search."
                 se.Input.TextSize = 13
@@ -3064,7 +3065,8 @@ local aa = {
                 v.Visible = true
                 if j.Search and se then 
                     se.Input.Text = "" 
-                    u.Size = UDim2.fromScale(0, 1) + UDim2.fromOffset(160, 0) 
+                    u.Size = UDim2.fromScale(0, 1) + UDim2.fromOffset(162, 0)
+                    se.Frame.Visible = true
                 end
                 if t:FindFirstChild("TextButton") == nil then
                     l:BuildDropdownList()
@@ -3079,11 +3081,12 @@ local aa = {
             function l.Close(B)
                 l.Opened = false
                 A.ScrollingEnabled = true
-                u.Size = UDim2.fromScale(1, 0.6)
+                u.Size = UDim2.fromScale(1, 0.7)
                 v.Visible = false
                 if j.Search and se then 
                     se.Input.Text = "" 
-                    u.Size = UDim2.fromScale(0, 0.6) + UDim2.fromOffset(160, 0)
+                    u.Size = UDim2.fromScale(0, 0.6) + UDim2.fromOffset(162, 0)
+                    se.Frame.Visible = false
                 end
             end
             function l.Display(B)
@@ -3149,7 +3152,8 @@ local aa = {
                                 Position = UDim2.fromOffset(10, 0),
                                 Name = "ButtonLabel",
                                 ThemeTag = {TextColor3 = "Text"}
-                            }
+                            },
+                            e("UICorner", {CornerRadius = UDim.new(0, 6)})
                         )
                     local M, N =
                         (e(
