@@ -3017,24 +3017,65 @@ local aa = {
                     end
                 end
             )
-            local A = h.ScrollFrame
-            function l.Open(B)
-                l:BuildDropdownList()
-                l.Opened = true
-                A.ScrollingEnabled = false
-                u.Size = UDim2.fromScale(1, 1)
-                v.Visible = true
-            end
-            function l.Close(B)
-                for E, F in next, t:GetChildren() do
-                    if not F:IsA "UIListLayout" then
-                        F:Destroy()
+            local se
+            if j.Search then
+                se = ac(f.Textbox)()
+                se.Frame.Parent = t
+                se.Frame.Size = UDim2.fromOffset(160, 30)
+                se.Frame.AnchorPoint = Vector2.new(1, 0.5)
+                se.Input.TextXAlignment = Enum.TextXAlignment.Center
+                se.Input.PlaceholderText = "Search."
+                se.Input.TextSize = 13
+                c.AddSignal(se.Input:GetPropertyChangedSignal "Text",
+                    function()
+                        if not l.Opened then
+                            return
+                        end
+                        l:UpdateSearch()
+                    end
+                )
+
+                function l.UpdateSearch(B)
+                    for _, ButtonX in next, t:GetChildren() do
+                        if ButtonX:IsA "TextButton" then
+                            local searchtext = string.lower(se.Input.Text)
+                            if searchtext == "" then
+                                ButtonX.Visible = true
+                            else
+                                local buttontext = string.lower(ButtonX.ButtonLabel.Text)
+                                if string.find(buttontext, searchtext) then
+                                    ButtonX.Visible = true
+                                else
+                                    ButtonX.Visible = false
+                                end
+                            end
+                        end
                     end
                 end
+            end
+            local A = h.ScrollFrame
+            function l.Open(B)
+                l.Opened = true
+                A.ScrollingEnabled = false
+                u.Size = UDim2.fromScale(0.6, 1)
+                v.Visible = true
+                if j.Search then se.Input.Text = "" end
+                if t:FindFirstChild("TextButton") == nil then
+                    l:BuildDropdownList()
+                else
+                    for E, F in next, t:GetChildren() do
+                        if F:IsA "TextButton" then
+                            F.Visible = true
+                        end
+                    end
+                end
+            end
+            function l.Close(B)
                 l.Opened = false
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
+                if j.Search then se.Input.Text = "" end
             end
             function l.Display(B)
                 local C, D = l.Values, ""
@@ -3062,28 +3103,13 @@ local aa = {
                 end
             end
             function l.BuildDropdownList(B)
+                for E, F in next, t:GetChildren() do
+                    if F:IsA "TextButton" then
+                        F:Destroy()
+                    end
+                end
                 local C, D = l.Values, {}
                 local G = 0
-                local SeArcH =
-                    e(
-                        "TextBox",
-                        {
-                            FontFace = Font.new "rbxasset://fonts/families/GothamSSm.json",
-                            TextColor3 = Color3.fromRGB(200, 200, 200),
-                            TextSize = 14,
-                            TextXAlignment = Enum.TextXAlignment.Center,
-                            TextYAlignment = Enum.TextYAlignment.Center,
-                            AutomaticSize = Enum.AutomaticSize.Y,
-                            BackgroundTransparency = 0.95,
-                            Size = UDim2.new(1, -5, 0, 32),
-                            Parent = t,
-                            PlaceholderText = "Search.",
-                            ThemeTag = {TextColor3 = "Text", PlaceholderColor3 = "SubText", BackgroundColor3 = "DropdownOption"}
-                        },
-                        {
-                            e("UICorner", {CornerRadius = UDim.new(0, 6)})
-                        }
-                    )
                 for H, I in next, C do
                     local J = {}
                     G = G + 1
@@ -3162,7 +3188,7 @@ local aa = {
                                     T.UserInputType == Enum.UserInputType.Touch
                              then
                                 local U = not N
-                                if j.UnSelect and l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                if l:GetActiveValues() == 1 and not U and not j.AllowNull then
                                 elseif not k.Reseting and m.IsLocked then l:Close()
                                 else
                                     if j.Multi then
@@ -3206,6 +3232,11 @@ local aa = {
             function l.SetValues(B, C)
                 if C then
                     l.Values = C
+                    for E, F in next, t:GetChildren() do
+                        if F:IsA "TextButton" then
+                            F:Destroy()
+                        end
+                    end
                 end
             end
             function l.OnChanged(B, C)
