@@ -3020,7 +3020,7 @@ local aa = {
             )
             local A = h.ScrollFrame
             search.Frame.Parent = t
-            search.Frame.Size = UDim2.new(1, -5, 0, 20)
+            search.Frame.Size = UDim2.new(1, -5, 0, 32)
             search.Input.TextXAlignment = Enum.TextXAlignment.Center
             search.Input.PlaceholderText = "Search"
             search.Input.TextSize = 13
