@@ -2871,7 +2871,7 @@ local aa = {
             l.SetDesc = m.SetDesc
             l.Lock = m.Lock
             l.UnLock = m.UnLock
-            local se = ac(f.Textbox)()
+            local search = ac(f.Textbox)()
             local n, o =
                 e(
                     "TextLabel",
@@ -2990,11 +2990,7 @@ local aa = {
                     v.Position = UDim2.fromOffset(p.AbsolutePosition.X - 1, p.AbsolutePosition.Y - 5 - w)
                 end, 0
             local y, z = function()
-                    if #l.Values > 10 then
-                        v.Size = UDim2.fromOffset(x, 392)
-                    else
-                        v.Size = UDim2.fromOffset(x, s.AbsoluteContentSize.Y + 10)
-                    end
+                v.Size = UDim2.fromOffset(160, 260)
                 end, function()
                     t.CanvasSize = UDim2.fromOffset(0, s.AbsoluteContentSize.Y)
                 end
@@ -3018,23 +3014,28 @@ local aa = {
                     end
                 end
             )
-            local se = ac(f.Textbox)()
-            se.Frame.Parent = t
-            se.Frame.Size = UDim2.new(1, -5, 0, 32)
             local A = h.ScrollFrame
+            search.Frame.Parent = t
+            search.Frame.Size = UDim2.new(1, -5, 0, 20)
+            search.Input.TextXAlignment = Enum.TextXAlignment.Center
+            search.Input.PlaceholderText = "Search"
+            search.Input.TextSize = 13
             function l.Open(B)
-                l:BuildDropdownList()
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
-            end
-            function l.Close(B)
-                for E, F in next, t:GetChildren() do
-                    if F:IsA "TextButton" then
-                        F:Destroy()
+                if t:FindFirstChild("TextButton") == nil then
+                    l:BuildDropdownList()
+                else
+                    for E, F in next, t:GetChildren() do
+                        if F:IsA "TextButton" then
+                            F.Visible = true
+                        end
                     end
                 end
+            end
+            function l.Close(B)
                 l.Opened = false
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
@@ -3066,6 +3067,11 @@ local aa = {
                 end
             end
             function l.BuildDropdownList(B)
+                for E, F in next, t:GetChildren() do
+                    if F:IsA "TextButton" then
+                        F:Destroy()
+                    end
+                end
                 local C, D = l.Values, {}
                 local G = 0
                 for H, I in next, C do
@@ -3090,12 +3096,11 @@ local aa = {
                                 Text = I,
                                 TextColor3 = Color3.fromRGB(200, 200, 200),
                                 TextSize = 13,
-                                TextXAlignment = Enum.TextXAlignment.Left,
+                                TextXAlignment = Enum.TextXAlignment.Center,
                                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                                 AutomaticSize = Enum.AutomaticSize.Y,
                                 BackgroundTransparency = 1,
                                 Size = UDim2.fromScale(1, 1),
-                                Position = UDim2.fromOffset(10, 0),
                                 Name = "ButtonLabel",
                                 ThemeTag = {TextColor3 = "Text"}
                             }
@@ -3129,9 +3134,7 @@ local aa = {
                     function J.UpdateButton(T)
                         if j.Multi then
                             N = l.Value[I]
-                            if N then
-                                P(0.89)
-                            end
+                            P(N and 0.89 or 1)
                         else
                             N = l.Value == I
                             P(N and 0.89 or 1)
@@ -3146,7 +3149,7 @@ local aa = {
                                     T.UserInputType == Enum.UserInputType.Touch
                              then
                                 local U = not N
-                                if j.UnSelect and l:GetActiveValues() == 1 and not U and not j.AllowNull then
+                                if l:GetActiveValues() == 1 and not U and not j.AllowNull then
                                 elseif not k.Reseting and m.IsLocked then l:Close()
                                 else
                                     if j.Multi then
@@ -3174,6 +3177,9 @@ local aa = {
                     J:UpdateButton()
                     l:Display()
                     D[M] = J
+                    if L.TextBounds.X >= 145 then
+                        L.TextScaled = true
+                    end
                 end
                 x = 0
                 for J, K in next, D do
@@ -3190,6 +3196,11 @@ local aa = {
             function l.SetValues(B, C)
                 if C then
                     l.Values = C
+                    for E, F in next, t:GetChildren() do
+                        if F:IsA "TextButton" then
+                            F:Destroy()
+                        end
+                    end
                 end
             end
             function l.OnChanged(B, C)
