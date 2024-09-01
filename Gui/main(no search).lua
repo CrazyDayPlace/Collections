@@ -3134,13 +3134,13 @@ local aa = {
                         if j.Multi then
                             N = l.Value[I]
                             if N then
-                                P(0.89)
+                                P(N and 0.89 or 1)
                             end
                         else
                             N = l.Value == I
                             P(N and 0.89 or 1)
                         end
-                        S:setGoal(d.Spring.new(N and 14 or 6, {frequency = 6}))
+                        S:setGoal(d.Spring.new(N and 14 or 0, {frequency = 6}))
                         R(N and 0 or 1)
                     end
                     L.InputBegan:Connect(
