@@ -2851,7 +2851,7 @@ local aa = {
         g.__index = g
         g.__type = "Dropdown"
         function g.New(h, i, j)
-            local k, l, m, se =
+            local k, l, m =
                 h.Library,
                 {
                     Values = j.Values,
@@ -2865,13 +2865,13 @@ local aa = {
                     Callback = j.Callback or function()
                         end
                 },
-                ac(f.Element)(j.Title, j.Description, h.Container, false),
-                nil
+                ac(f.Element)(j.Title, j.Description, h.Container, false)
             m.DescLabel.Size = UDim2.new(1, -170, 0, 14)
             l.SetTitle = m.SetTitle
             l.SetDesc = m.SetDesc
             l.Lock = m.Lock
             l.UnLock = m.UnLock
+            local search = ac(f.Textbox)()
             local n, o =
                 e(
                     "TextLabel",
@@ -2987,18 +2987,10 @@ local aa = {
                     if ai.ViewportSize.Y - p.AbsolutePosition.Y < v.AbsoluteSize.Y - 5 then
                         w = v.AbsoluteSize.Y - 5 - (ai.ViewportSize.Y - p.AbsolutePosition.Y) + 40
                     end
-                    if j.Search then
-                        v.Position = UDim2.fromOffset(p.AbsolutePosition.X - 1, (p.AbsolutePosition.Y - 5 - w) + 30)
-                    else
-                        v.Position = UDim2.fromOffset(p.AbsolutePosition.X - 1, p.AbsolutePosition.Y - 5 - w)
-                    end
+                    v.Position = UDim2.fromOffset(p.AbsolutePosition.X - 1, p.AbsolutePosition.Y - 5 - w)
                 end, 0
             local y, z = function()
-                    if #l.Values > 10 then
-                        v.Size = UDim2.fromOffset(x, 392)
-                    else
-                        v.Size = UDim2.fromOffset(x, s.AbsoluteContentSize.Y + 10)
-                    end
+                v.Size = UDim2.fromOffset(160, 160)
                 end, function()
                     t.CanvasSize = UDim2.fromOffset(0, s.AbsoluteContentSize.Y)
                 end
@@ -3022,52 +3014,17 @@ local aa = {
                     end
                 end
             )
-            if j.Search then
-                se = ac(f.Textbox)()
-                se.Frame.Parent = p
-                se.Frame.Size = UDim2.fromOffset(160, 30)
-                se.Frame.Visible = false
-                se.Input.TextXAlignment = Enum.TextXAlignment.Center
-                se.Input.PlaceholderText = "Search."
-                se.Input.TextSize = 13
-                c.AddSignal(se.Input:GetPropertyChangedSignal "Text",
-                    function()
-                        if not l.Opened then
-                            return
-                        end
-                        l:UpdateSearch()
-                    end
-                )
-
-                function l.UpdateSearch(B)
-                    for _, ButtonX in next, t:GetChildren() do
-                        if ButtonX:IsA "TextButton" then
-                            local searchtext = string.lower(se.Input.Text)
-                            if searchtext == "" then
-                                ButtonX.Visible = true
-                            else
-                                local buttontext = string.lower(ButtonX.ButtonLabel.Text)
-                                if string.find(buttontext, searchtext) then
-                                    ButtonX.Visible = true
-                                else
-                                    ButtonX.Visible = false
-                                end
-                            end
-                        end
-                    end
-                end
-            end
             local A = h.ScrollFrame
+            search.Frame.Parent = t
+            search.Frame.Size = UDim2.new(1, -5, 0, 20)
+            search.Input.TextXAlignment = Enum.TextXAlignment.Center
+            search.Input.PlaceholderText = "Search"
+            search.Input.TextSize = 13
             function l.Open(B)
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
-                if j.Search and se then 
-                    se.Input.Text = ""
-                    u.Size = UDim2.fromScale(0, 1) + UDim2.fromOffset(162, 0)
-                    se.Frame.Visible = true
-                end
                 if t:FindFirstChild("TextButton") == nil then
                     l:BuildDropdownList()
                 else
@@ -3081,13 +3038,8 @@ local aa = {
             function l.Close(B)
                 l.Opened = false
                 A.ScrollingEnabled = true
-                u.Size = UDim2.fromScale(1, 0.7)
+                u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
-                if j.Search and se then 
-                    se.Input.Text = "" 
-                    u.Size = UDim2.fromScale(0, 0.6) + UDim2.fromOffset(162, 0)
-                    se.Frame.Visible = false
-                end
             end
             function l.Display(B)
                 local C, D = l.Values, ""
@@ -3144,7 +3096,7 @@ local aa = {
                                 Text = I,
                                 TextColor3 = Color3.fromRGB(200, 200, 200),
                                 TextSize = 13,
-                                TextXAlignment = Enum.TextXAlignment.Left,
+                                TextXAlignment = Enum.TextXAlignment.Center,
                                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                                 AutomaticSize = Enum.AutomaticSize.Y,
                                 BackgroundTransparency = 1,
@@ -3152,8 +3104,7 @@ local aa = {
                                 Position = UDim2.fromOffset(10, 0),
                                 Name = "ButtonLabel",
                                 ThemeTag = {TextColor3 = "Text"}
-                            },
-                            {e("UICorner", {CornerRadius = UDim.new(0, 6)})}
+                            }
                         )
                     local M, N =
                         (e(
@@ -3184,9 +3135,7 @@ local aa = {
                     function J.UpdateButton(T)
                         if j.Multi then
                             N = l.Value[I]
-                            if N then
-                                P(0.89)
-                            end
+                            P(N and 0.89 or 1)
                         else
                             N = l.Value == I
                             P(N and 0.89 or 1)
