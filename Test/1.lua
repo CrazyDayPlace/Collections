@@ -3020,15 +3020,21 @@ local aa = {
             )
             local A = h.ScrollFrame
             search.Frame.Parent = t
-            search.Frame.Size = UDim2.new(1, -5, 0, 20)
+            search.Frame.Size = UDim2.new(1, -5, 0, 28)
             search.Input.TextXAlignment = Enum.TextXAlignment.Center
             search.Input.PlaceholderText = "Search"
             search.Input.TextSize = 13
+            c.AddSignal(search.Input:GetPropertyChangedSignal "Text", function()
+                if not l.Opened then
+                else l:UpdateText()
+                end
+            end)
             function l.Open(B)
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
+                search.Input.Text = ""
                 if t:FindFirstChild("TextButton") == nil then
                     l:BuildDropdownList()
                 else
@@ -3044,6 +3050,31 @@ local aa = {
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
+                search.Input.Text = ""
+            end
+            function l.Close(B)
+                l.Opened = false
+                A.ScrollingEnabled = true
+                u.Size = UDim2.fromScale(1, 0.6)
+                v.Visible = false
+                if j.Search then se.Input.Text = "" end
+            end
+            function l.UpdateText(B)
+                for DI, CV in next, t:GetChildren() do
+                    if CV:IsA "TextButton" then
+                        local ST = string.lower(search.Input.Text)
+                        if ST == "" then
+                            CV.Visible = true
+                        else
+                            local BT = string.lower(CV.ButtonLabel.Text)
+                            if string.find(BT, ST) then
+                                CV.Visible = true
+                            else
+                                CV.Visible = false
+                            end
+                        end
+                    end
+                end
             end
             function l.Display(B)
                 local C, D = l.Values, ""
