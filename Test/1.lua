@@ -2990,11 +2990,11 @@ local aa = {
                     v.Position = UDim2.fromOffset(p.AbsolutePosition.X - 1, p.AbsolutePosition.Y - 5 - w)
                 end, 0
             local y, z = function()
-                    if #l.Values > 10 then
-                        v.Size = UDim2.fromOffset(x, 392)
-                    else
-                        v.Size = UDim2.fromOffset(x, s.AbsoluteContentSize.Y + 10)
-                    end
+                if #l.Values > 10 then
+                    v.Size = UDim2.fromOffset(160, 392)
+                else
+                    v.Size = UDim2.fromOffset(160, s.AbsoluteContentSize.Y + 10)
+                end
                 end, function()
                     t.CanvasSize = UDim2.fromOffset(0, s.AbsoluteContentSize.Y)
                 end
@@ -3100,12 +3100,11 @@ local aa = {
                                 Text = I,
                                 TextColor3 = Color3.fromRGB(200, 200, 200),
                                 TextSize = 13,
-                                TextXAlignment = Enum.TextXAlignment.Left,
+                                TextXAlignment = Enum.TextXAlignment.Center,
                                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                                 AutomaticSize = Enum.AutomaticSize.Y,
                                 BackgroundTransparency = 1,
                                 Size = UDim2.fromScale(1, 1),
-                                Position = UDim2.fromOffset(10, 0),
                                 Name = "ButtonLabel",
                                 ThemeTag = {TextColor3 = "Text"}
                             }
@@ -3182,6 +3181,9 @@ local aa = {
                     J:UpdateButton()
                     l:Display()
                     D[M] = J
+                    if L.TextBounds.X >= 145 then
+                        L.TextScaled = true
+                    end
                 end
                 x = 0
                 for J, K in next, D do
