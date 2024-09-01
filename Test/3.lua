@@ -2990,7 +2990,11 @@ local aa = {
                     v.Position = UDim2.fromOffset(p.AbsolutePosition.X - 1, p.AbsolutePosition.Y - 5 - w)
                 end, 0
             local y, z = function()
-                v.Size = UDim2.fromOffset(160, 160)
+                if #l.Values > 10 then
+                    v.Size = UDim2.fromOffset(160, 392)
+                else
+                    v.Size = UDim2.fromOffset(160, s.AbsoluteContentSize.Y + 10)
+                end
                 end, function()
                     t.CanvasSize = UDim2.fromOffset(0, s.AbsoluteContentSize.Y)
                 end
@@ -3016,15 +3020,21 @@ local aa = {
             )
             local A = h.ScrollFrame
             search.Frame.Parent = t
-            search.Frame.Size = UDim2.new(1, -5, 0, 20)
+            search.Frame.Size = UDim2.new(1, -5, 0, 32)
             search.Input.TextXAlignment = Enum.TextXAlignment.Center
             search.Input.PlaceholderText = "Search"
             search.Input.TextSize = 13
+            c.AddSignal(search.Input:GetPropertyChangedSignal "Text", function()
+                if not l.Opened then
+                else l:UpdateText()
+                end
+            end)
             function l.Open(B)
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
+                search.Input.Text = ""
                 if t:FindFirstChild("TextButton") == nil then
                     l:BuildDropdownList()
                 else
@@ -3040,6 +3050,31 @@ local aa = {
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
+                search.Input.Text = ""
+            end
+            function l.Close(B)
+                l.Opened = false
+                A.ScrollingEnabled = true
+                u.Size = UDim2.fromScale(1, 0.6)
+                v.Visible = false
+                if j.Search then se.Input.Text = "" end
+            end
+            function l.UpdateText(B)
+                for DI, CV in next, t:GetChildren() do
+                    if CV:IsA "TextButton" then
+                        local ST = string.lower(search.Input.Text)
+                        if ST == "" then
+                            CV.Visible = true
+                        else
+                            local BT = string.lower(CV.ButtonLabel.Text)
+                            if string.find(BT, ST) then
+                                CV.Visible = true
+                            else
+                                CV.Visible = false
+                            end
+                        end
+                    end
+                end
             end
             function l.Display(B)
                 local C, D = l.Values, ""
@@ -3101,7 +3136,6 @@ local aa = {
                                 AutomaticSize = Enum.AutomaticSize.Y,
                                 BackgroundTransparency = 1,
                                 Size = UDim2.fromScale(1, 1),
-                                Position = UDim2.fromOffset(10, 0),
                                 Name = "ButtonLabel",
                                 ThemeTag = {TextColor3 = "Text"}
                             }
@@ -3178,6 +3212,9 @@ local aa = {
                     J:UpdateButton()
                     l:Display()
                     D[M] = J
+                    if L.TextBounds.X >= 145 then
+                        L.TextScaled = true
+                    end
                 end
                 x = 0
                 for J, K in next, D do
