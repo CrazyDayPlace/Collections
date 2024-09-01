@@ -3133,9 +3133,7 @@ local aa = {
                     function J.UpdateButton(T)
                         if j.Multi then
                             N = l.Value[I]
-                            if N then
-                                P(N and 0.89 or 1)
-                            end
+                            P(N and 0.89 or 1)
                         else
                             N = l.Value == I
                             P(N and 0.89 or 1)
