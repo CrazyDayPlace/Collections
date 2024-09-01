@@ -2871,6 +2871,7 @@ local aa = {
             l.SetDesc = m.SetDesc
             l.Lock = m.Lock
             l.UnLock = m.UnLock
+            local search = ac(f.Textbox)()
             local n, o =
                 e(
                     "TextLabel",
@@ -2951,7 +2952,7 @@ local aa = {
             local u =
                 e(
                 "Frame",
-                {Size = UDim2.fromScale(0.95, 0.6), ThemeTag = {BackgroundColor3 = "DropdownHolder"}},
+                {Size = UDim2.fromScale(1, 0.6), ThemeTag = {BackgroundColor3 = "DropdownHolder"}},
                 {
                     t,
                     e("UICorner", {CornerRadius = UDim.new(0, 7)}),
@@ -2986,7 +2987,7 @@ local aa = {
                     if ai.ViewportSize.Y - p.AbsolutePosition.Y < v.AbsoluteSize.Y - 5 then
                         w = v.AbsoluteSize.Y - 5 - (ai.ViewportSize.Y - p.AbsolutePosition.Y) + 40
                     end
-                    v.Position = UDim2.fromOffset(p.AbsolutePosition.X - 1, (p.AbsolutePosition.Y - 5 - w) + 35)
+                    v.Position = UDim2.fromOffset(p.AbsolutePosition.X - 1, p.AbsolutePosition.Y - 5 - w)
                 end, 0
             local y, z = function()
                     if #l.Values > 10 then
@@ -3017,48 +3018,17 @@ local aa = {
                     end
                 end
             )
-            local se
-            if j.Search then
-                se = ac(f.Textbox)()
-                se.Frame.Parent = t
-                se.Frame.Size = UDim2.new(1, -5, 0, 20)
-                se.Input.TextXAlignment = Enum.TextXAlignment.Center
-                se.Input.PlaceholderText = "Search."
-                se.Input.TextSize = 13
-                c.AddSignal(se.Input:GetPropertyChangedSignal "Text",
-                    function()
-                        if not l.Opened then
-                            return
-                        end
-                        l:UpdateSearch()
-                    end
-                )
-
-                function l.UpdateSearch(B)
-                    for _, ButtonX in next, t:GetChildren() do
-                        if ButtonX:IsA "TextButton" then
-                            local searchtext = string.lower(se.Input.Text)
-                            if searchtext == "" then
-                                ButtonX.Visible = true
-                            else
-                                local buttontext = string.lower(ButtonX.ButtonLabel.Text)
-                                if string.find(buttontext, searchtext) then
-                                    ButtonX.Visible = true
-                                else
-                                    ButtonX.Visible = false
-                                end
-                            end
-                        end
-                    end
-                end
-            end
             local A = h.ScrollFrame
+            search.Frame.Parent = t
+            search.Frame.Size = UDim2.new(1, -5, 0, 20)
+            search.Input.TextXAlignment = Enum.TextXAlignment.Center
+            search.Input.PlaceholderText = "Search"
+            search.Input.TextSize = 13
             function l.Open(B)
                 l.Opened = true
                 A.ScrollingEnabled = false
                 u.Size = UDim2.fromScale(1, 1)
                 v.Visible = true
-                if j.Search then se.Input.Text = "" end
                 if t:FindFirstChild("TextButton") == nil then
                     l:BuildDropdownList()
                 else
@@ -3074,7 +3044,6 @@ local aa = {
                 A.ScrollingEnabled = true
                 u.Size = UDim2.fromScale(1, 0.6)
                 v.Visible = false
-                if j.Search then se.Input.Text = "" end
             end
             function l.Display(B)
                 local C, D = l.Values, ""
@@ -3131,7 +3100,7 @@ local aa = {
                                 Text = I,
                                 TextColor3 = Color3.fromRGB(200, 200, 200),
                                 TextSize = 13,
-                                TextXAlignment = Enum.TextXAlignment.Left,
+                                TextXAlignment = Enum.TextXAlignment.Center,
                                 BackgroundColor3 = Color3.fromRGB(255, 255, 255),
                                 AutomaticSize = Enum.AutomaticSize.Y,
                                 BackgroundTransparency = 1,
@@ -3170,9 +3139,7 @@ local aa = {
                     function J.UpdateButton(T)
                         if j.Multi then
                             N = l.Value[I]
-                            if N then
-                                P(0.89)
-                            end
+                            P(N and 0.89 or 1)
                         else
                             N = l.Value == I
                             P(N and 0.89 or 1)
